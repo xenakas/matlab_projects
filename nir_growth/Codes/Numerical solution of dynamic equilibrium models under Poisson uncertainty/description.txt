@@ -1,0 +1,14 @@
+Posch, O., Trimborn, T., Numerical solution of dynamic equilibrium models under Poisson uncertainty. Journal of Economic Dynamics and Control (2013).
+
+The Matlab files illustrate how to apply the Waveform Relaxation algorithm to solve a Neoclassical model with disasters. They also reproduce Figures 1 - 2 from Posch and Trimborn (2013). 
+
+
+
+Execution:
+
+- Choose the directory "Waveform" as current Matlab directory
+
+- execute "rbc.m" to start the calculations. The Figures show the policy function, the deviation from the last iteration, and absulte and relative errors (if available).
+
+- to modify the model open "rbc.m" (main file), "funcODE.m" (set of differential equations), and "findss.m" (steady state conditions).
+

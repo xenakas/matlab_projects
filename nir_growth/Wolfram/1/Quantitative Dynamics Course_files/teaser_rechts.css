@@ -1,0 +1,50 @@
+﻿/* CSS für editierbare Promo-Teaser */
+.promotion {
+	background-image:url(../images/teasergrafik/bg_teaser-body.jpg);
+	background-repeat:repeat-y;
+	width:200px;
+	height:auto;
+	clear:both;
+	color:#FFFFFF;
+}
+
+.promotion a {
+	color:#FFFFFF;
+}
+
+.promotion p {
+	padding-left:7px;
+	margin:0;
+}
+
+.promotion p.teaser_description {
+	font-size:0.7em;
+}
+
+.promotion p.teaser_title {
+    width: 180px;
+}
+
+
+/* Icon Dateityp rechts oben */
+div.promotion div.teaser_icon  {
+	background-image:url(../images/teasergrafik/bg_teaser-header_graublau.jpg);
+	background-repeat:no-repeat;
+	width:200px;
+	height:37px;
+	margin-bottom:4px;
+}
+
+	div.promotion div.teaser_icon img {
+		float:right;
+		margin-top:10px;
+		margin-right:15px;
+	}
+
+/* Abschluss */
+div.promotion div.teaser_footer {
+	width:200px;
+	height:20px;
+	background-image:url(../images/teasergrafik/bg_teaser-footer.jpg);
+	background-repeat:no-repeat;	
+}

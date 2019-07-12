@@ -1,0 +1,337 @@
+/* CSS fuer den kompletten header */
+
+*{
+	margin: 0px;
+	padding: 0px;
+}
+
+/* Container Seitenkopf */
+#header {
+	height: 124px;
+	background-color: #fff;
+	max-width: 985px;
+	background: #fff url(../images/header_bottom_background.gif) repeat-x bottom left;
+ 	position: relative;
+	z-index: 2;
+	font-size:0.875em;
+	min-width: 770px;
+}
+
+	/* Container f�r zus�tzliche Navigation, zum Beispiel Forschungsdatenbank */
+	#header-nav {
+		float: left;
+		height: 20px;
+		background: #fff url(../images/bg_header-nav.jpg) repeat-x 0 0;
+		max-width:1000px;
+		min-width:775px;
+	}
+
+
+	#courtesy-menu {
+		max-width: 985px;
+		width: 100%;
+		height:1.4em;
+		min-height: 21px;
+		padding-top:1px;
+		background-color: #414141;
+		color: #fff;
+	}
+	
+	* html #courtesy-menu {
+		height:1.5em;
+	}
+
+/* Metanavigation oben */
+ul#courtesy-links {
+	float: left;
+	margin-left:20px;
+	background-color:#414141;
+}
+
+	#courtesy-menu li {
+		color: #fff;
+		font-size: .7em;
+		padding-top:3px;
+	}
+
+	#courtesy-menu a{
+		color: #fff;
+		font-size: .7em;
+	}
+
+	#courtesy-menu li a{
+		color: #fff;
+		font-size: 1em;
+	}
+
+	ul#courtesy-links li {
+		float: left;
+		margin-right: 0.8em;
+		list-style: none;
+		list-style-type: none;
+	}
+	
+	ul#courtesy-links li.last {
+		margin-right:1em;
+	}
+
+	/* Sprachauswahl */
+	#courtesy-menu #english {
+		float: right;
+		height:1.5em;
+		min-height:16px;
+		display: block;
+		padding-top: 3px;
+		padding-right: 21px;
+		margin-right: 0.5em;
+		background-image:url(../images/world.png);
+		background-repeat:no-repeat;
+		background-position:right 1px;
+		background-color:#414141;
+	}
+	
+	#courtesy-menu form {
+		display:block;
+		float: right;
+		margin: 0 10px 0 0;
+		background:#414141;
+		height: auto;
+	}
+	
+		#courtesy-menu form label {
+			display: none;
+		}
+		
+		#search-button {
+			width: 12px;
+			border: none;
+			padding-right: 1em;
+			background-color:transparent;
+			background-image:url(../images/loupe.png);
+			background-repeat:no-repeat;
+			background-position:0px -1px;
+			color: #fff;
+		}
+
+		#courtesy-menu form input#search,
+		#courtesy-menu form select#quicklinks,
+		#courtesy-menu form select#quicklinks_nojs {
+			width:10.7em;
+			min-width: 110px;
+			height:1.5em;
+			min-height: 16px;
+			border: 1px solid #ffffff;
+			border-left: 0px solid #3366CC;
+			background: #e9edf0;
+			padding-left: 1px;
+			margin-left: 0.8em;
+			font-size: 0.7em;
+    		vertical-align: middle;
+
+/*			box-sizing: border-box; */
+/*			-moz-box-sizing: border-box; */ /* gecko */
+/*			-webkit-box-sizing: border-box; */ /* khtml/webkit */
+		}
+		
+		#courtesy-menu form select#quicklinks {
+			margin-top:1px;
+		}
+
+		#courtesy-menu form input#search:focus,
+		#courtesy-menu form select.quicklinks:focus {
+			border: 1px solid #ffffff;
+			border-left: 0px solid #3366CC;
+			background: #ffffff;
+		}
+		
+
+/* Seitentitel mit Logo */
+#site-title {
+	position:absolute;
+	top:0;
+	left:0;
+	margin-top:1.65em;
+	width:260px;
+	height:57px;
+	padding-left:20px;
+	padding-top:20px;
+	background-color:#FFFFFF;
+}
+
+	#site-title a {
+		position: absolute;
+		width: 233px;
+		height: 37px;
+		color: #333;
+	}
+
+		#site-title a span {
+			position: absolute;
+			right: -3000px;
+			top: -3000px;
+			width: 0;
+			height: 0;
+			overflow: hidden;
+			display: inline;
+			font-size: .8em;
+			color: #ccc;	
+		}
+
+/* Header für WiFa */
+#wifaheader {
+	float: right;
+	background-color: #ffffff;
+	height: 82px;
+}
+
+	#wifaheader img{
+		background: #ffffff url(../images/header_wifa_1.jpg) top right;
+		height: 82px;
+		width: 670px;
+	}
+
+	#wifaheader img:hover{
+		background: #ffffff url(../images/header_wifa_2.jpg) top right;
+		height: 82px;
+		width: 670px;
+	}
+	
+/* Header Intranet */	
+#intranet_header {
+	float: right;
+	background-color: #ffffff;
+	height: 82px;
+}
+
+	#intranet_header img{
+		background: #ffffff url(../images/site-header_intranet.jpg) top right;
+		background-repeat:no-repeat;
+		height: 82px;
+		width: 670px;
+	}
+
+/* Nummerierung der Navigationspunkte */
+.nav_number{ 
+	left:-5000px; 
+	position:absolute; 
+	top:-5000px; 
+	z-index:100; 
+}
+
+
+/* Star-HTML-Hack (bis IE6) */
+/*
+* html #hierDieID {
+
+}
+*/
+
+/* IE6 */
+
+* html #header {
+	width: expression((document.documentElement && document.documentElement.clientHeight) ? ((document.documentElement.clientWidth < 760) ? "760px" : ((document.documentElement.clientWidth > 985) ? "985px" : "auto" )) : ((document.body.clientWidth < 760) ? "760px" : ((document.body.clientWidth > 985) ? "985px" : "auto" )));
+}
+
+* html ul#courtesy-links{
+	margin-left: 10px;
+}
+
+* html ul#courtesy-links{
+	margin-right: 0px;
+}
+
+* html #brochure {
+		float: right;
+		height:1.5em;
+		width:70px;
+		display: block;
+		padding-top: 3px;
+		padding-right: 21px;
+		margin-right: 0.5em;
+		background-image:url(../images/world.png);
+		background-repeat:no-repeat;
+		background-position:right 1px;
+		background-color:#414141;
+	}
+
+* html div#header div#courtesy-menu form {
+		display:block;
+		float: right;
+		margin: 0 10px 0 0;
+		padding:0;
+		background:#414141;
+		height: 21px;
+		margin-top:-2px;		
+	}
+	
+		* html div#header div#courtesy-menu form label {
+			display: none;
+		}
+		
+		* html div#header div#courtesy-menu form input#search-button {
+			width: 12px;
+			border: none;
+			padding-right: 1em;
+			background-color:transparent;
+			background-image:url(../images/loupe.png);
+			background-repeat:no-repeat;
+			background-position:0px 2px;
+			color: #fff;
+		}
+
+		* html div#header div#courtesy-menu form input#search,
+		* html div#header div#courtesy-menu form select#quicklinks {
+			width: 110px;
+			height: 16px;
+			border: 1px solid #ffffff;
+			border-left: 0px solid #3366CC;
+			background: #e9edf0;
+			padding-left: 1px;
+			margin-left: 0.8em;
+			font-size: 0.7em;
+    		vertical-align: middle;
+		}
+		
+		* html div#header div#courtesy-menu form select#quicklinks {
+			margin-top:2px;
+		}		
+
+		* html div#header div#courtesy-menu form input#search:focus,
+		* html div#header div#courtesy-menu form  select.quicklinks:focus {
+			border: 1px solid #ffffff;
+			border-left: 0px solid #3366CC;
+			background: #ffffff;
+		}
+
+
+/*
+* html #courtesy-menu form input#search, 
+* html #courtesy-menu form select#quicklinks, 
+* html #courtesy-menu form textarea#search {
+	width: 110px;
+}
+
+* html #courtesy-menu form{
+	margin-right: 5px;
+}
+*/
+
+/* Star-Plus-HTML-Hack (IE7) */
+/*
+*:first-child+html #HierDieID {
+ 
+}
+*/
+*:first-child+html #courtesy-menu form select#quicklinks {
+	height:1.5em;
+	min-height:16px;
+	margin-top:2px;
+}
+*:first-child+html #courtesy-menu form input#search {
+	height:1.3em;
+	min-height:14px;
+	margin-top:-1px;
+}
+*:first-child+html #courtesy-menu form input#search-button {
+	background-position:0 2px;
+}

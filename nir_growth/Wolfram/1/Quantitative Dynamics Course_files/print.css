@@ -1,0 +1,256 @@
+/* For IE for Windows */
+/*
+* html body {
+    width: 60pt;
+}
+*/
+
+
+/* */
+
+body {
+	margin: 0;
+	padding: 0;
+	background-color: #fff;
+	color: #222;
+	font-family: Arial, Verdana, Tahoma, Helvetica, sans-serif;
+	font-size: 10pt;
+	line-height: 140%;
+}
+
+h1, h2, h3 {
+	margin: 5pt 0;
+	font-weight: normal;
+	clear: both;
+	page-break-before: auto;
+	page-break-after: avoid;
+}
+
+h1 {
+	font-size: 15pt;
+	line-height: 150%;	
+}
+
+h1.invisible {
+	position: absolute;
+	top: 50pt;
+	width: 400pt;
+} 
+
+h2 {
+	font-size: 14pt;
+}
+
+h3 {
+	font-size: 12pt;
+	line-height: 160%;
+}
+
+h4 {
+	font-size: 10pt;
+	text-decoration: underline;
+}
+
+h5 {
+	font-size: 10pt;
+}
+
+h6 {
+	font-size: 10pt;
+	font-style: italic;
+}
+
+p {
+	margin-top: 0;
+}
+
+a {
+	color: #222;
+	text-decoration: none;
+}
+/* Deaktiviert am 8.3.2011 durch Rolf Kamieth
+#wrapper #content-inner p a:after {
+	content: " [" attr(href) "] ";
+}
+*/
+a img {
+	border: none;
+}
+
+ul {
+	margin-left: 5pt;
+	padding-left: 10pt;	
+}
+
+li {
+	list-style: disc;
+	line-height: inherit;
+}
+
+table {
+	width: 98%;
+	background-color: #ccc;
+	page-break-before: auto;
+	page-break-inside: avoid;
+}
+
+table,
+th {
+	border: 1px solid #777;
+	border-collapse: collapse;
+}
+
+td {
+	border: 1px solid #777;
+	padding: 2pt;
+	background-color: #fff;
+}
+
+caption {
+	text-align: left;
+}
+
+thead,
+tfoot td {
+	background-color: #f4f4f4;
+	text-align: center;
+}
+
+hr {
+	display: none;
+}
+
+/* hiding misc divs and classes */
+
+.top,
+.teaser.promotion,
+#header-nav,
+#section-header,
+#party2009,
+#left-column,
+#banner-hoch,
+#courtesy-menu,
+#skip-links,
+#contentfusssymb,
+#banner-quer {
+	display: none !important;
+}
+
+/* div sections */
+
+#header {
+	position: relative;
+	background-image: none;
+}
+
+#site-title {
+	height: 80pt;
+}
+
+* html #wrapper, * html #header {
+	width: 650px !important; 
+}
+
+#breadcrumb {
+	float: left;
+	margin: 5pt 0 15pt 0;
+	color: #888;
+	font-size: 9pt;
+	display: none;
+}
+
+#breadcrumb a {
+	text-decoration: none;
+	color: #888;
+}
+
+#breadcrumb span.home,
+#breadcrumb ul {
+	float: left;
+	margin: 0;
+}
+
+#breadcrumb ul li {
+	float: left;
+	margin-right: 2pt;
+	list-style: none;
+	list-style-image: none;
+}
+
+
+#content-wrapper {
+	padding: 0;
+}
+
+#content{
+	width: 69% !important;
+	float: left !important;
+	padding: 0;
+}
+
+#right-column {
+	position: absolute;
+	right: 0;
+	width: 28% !important;
+	font-size: 90% !important;
+	margin: 0;
+	padding: 0;
+}
+
+
+#contentfuss {
+	padding: 5pt 0;
+	border-top: 1pt solid #888;
+	font-size: 90%;
+	color: #888;
+	clear: both;
+}
+
+/* class */
+
+.inhalt a {
+	text-decoration: none;
+	/*border-bottom: 1pt solid #ccc;*/		
+}
+
+.bildlinks,
+.bildrechts {
+	float: right;
+	margin: 0 0 10pt 10pt;
+	clear: right;
+}
+
+.bildlinks a,
+.bildrechts a {
+	border: none;	
+	text-decoration: none;
+}
+
+div.caption {
+	padding: 2pt 2pt 0 2pt;
+	font-size: 85%;
+	font-style: italic;
+}
+
+div.caption a {
+	text-decoration: none;
+}
+
+h2.invisible {
+	display: none;
+}
+
+div.inhalt h1.invisible {
+	display:none;
+}
+
+div.content-navigation {
+	display:none;
+}
+
+div.pagebreak {
+	page-break-before:always;
+	width:100%;
+	height:1px;
+	clear:both;
+}

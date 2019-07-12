@@ -1,0 +1,51 @@
+
+function changePage(mySource) {
+			var baseURL = "http://www.uni-siegen.de";
+			var target = document.forms.navi.elements[mySource].options[document.forms.navi.elements[mySource].options.selectedIndex].value;
+			if (target != 'invalid') {
+				if (target.substr(0,4) == 'http') {
+					window.location.href=target;
+				}
+				else {
+					window.location.href=baseURL+target;
+				}
+			}
+		}
+
+
+
+$(document).ready(
+
+
+
+
+  function() {
+    $('#google').hide();
+    $('#suchknopf').click(function(){
+      $("#google").toggleClass("show");   
+      if ($("#google").hasClass('show')) {         
+        $("#google").fadeIn("fast");
+      } else{
+        $("#google").fadeOut("fast");
+      }
+    }); 
+
+
+   $('#redaktionsmail').removeAttr("href");
+
+
+
+   $('#redaktionsmail').click(function(){ 
+      $("#feedback").show();
+      document.mail_an_online_redaktion.feedback_realname.focus();
+
+   }); 
+
+
+  }
+);
+
+
+
+
+

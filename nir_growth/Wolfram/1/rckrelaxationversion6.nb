@@ -1,0 +1,1955 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 6.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[     73379,       1946]
+NotebookOptionsPosition[     71328,       1869]
+NotebookOutlinePosition[     71690,       1885]
+CellTagsIndexPosition[     71647,       1882]
+WindowFrame->Normal
+ContainsDynamic->False*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Relaxation method for the Ramsey Model", "Subtitle",
+ CellChangeTimes->{{3.411809262809*^9, 3.4118092680038*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Description", "Section",
+ CellChangeTimes->{{3.411809277317*^9, 3.4118092776134*^9}}],
+
+Cell[TextData[{
+ "The Ramsey, Cass and Koopmans (RCK) model consists of two ODEs with two \
+variables, ",
+ StyleBox["k",
+  FontSlant->"Italic"],
+ " and ",
+ StyleBox["c",
+  FontSlant->"Italic"],
+ ", and no static equations. The values of ",
+ StyleBox["k",
+  FontSlant->"Italic"],
+ " and ",
+ StyleBox["c",
+  FontSlant->"Italic"],
+ " in equilibrium are computed directly with a formula based on the model \
+parameters. The initial value of ",
+ StyleBox["k",
+  FontSlant->"Italic"],
+ " (initial boundary) is 10% of its value in the equilibrium solution, and \
+the final value of ",
+ StyleBox["c",
+  FontSlant->"Italic"],
+ " is its value in the equilibrium solution; in other words, the shock \
+consists in reducing ",
+ StyleBox["k",
+  FontSlant->"Italic"],
+ " to 10% of its equilibrium value. The program then graphs the recovery from \
+ this shock over time.\n\nThis is the program version for ",
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ " 6.\n\n(by Manuel Bichsel ETH Zurich)"
+}], "Text",
+ CellChangeTimes->{{3.39239384059375*^9, 3.392393840625*^9}, {
+  3.411809272949*^9, 3.411809273495*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Input", "Section"],
+
+Cell[CellGroupData[{
+
+Cell["model settings", "Subsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", "Preparations", " ", "*)"}], "\[IndentingNewLine]", 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"Off", "[", 
+     RowBox[{
+      RowBox[{"General", "::", "spell"}], ",", 
+      RowBox[{"General", "::", "spell1"}]}], "]"}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{"Definition", " ", "of", " ", "model", " ", "parameters"}], " ", 
+    "*)"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"A", " ", "=", " ", "1.0"}], ";"}], " ", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"alpha", " ", "=", " ", "0.3"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"delta", " ", "=", " ", "0.05"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"rho", " ", "=", " ", "0.02"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"nPop", " ", "=", " ", "0.01"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"gx", " ", "=", " ", "0.02"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"theta", " ", "=", " ", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"delta", "+", "rho"}], ")"}], " ", "/", " ", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"alpha", "*", 
+         RowBox[{"(", 
+          RowBox[{"delta", "+", "nPop", "+", "gx"}], ")"}]}], "-", "gx"}], 
+       ")"}]}]}], ";"}], "\n", "\[IndentingNewLine]", "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+     RowBox[{"declaration", " ", "of", " ", "the", " ", "variables"}], ",", 
+     " ", 
+     RowBox[{"the", " ", "ODEs"}], ",", " ", 
+     RowBox[{
+     "and", " ", "the", " ", "number", " ", "of", " ", "initial", " ", "and", 
+      " ", "final", " ", "boundary", " ", "conditions"}]}], " ", "*)"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+     RowBox[{
+     "introduction", " ", "of", " ", "the", " ", "variable", " ", "names", 
+      " ", "in", " ", "the", " ", "same", " ", "order", " ", "as", " ", "in", 
+      " ", "the", " ", "ODE", " ", "equations", " ", "below"}], ",", " ", 
+     RowBox[{"but", " ", "begin", " ", "with", " ", "time", " ", "t"}]}], " ",
+     "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"variableNames", " ", "=", " ", 
+     RowBox[{"{", "\[IndentingNewLine]", 
+      RowBox[{
+      "\"\<t\>\"", ",", "\[IndentingNewLine]", "\"\<k\>\"", ",", 
+       "\[IndentingNewLine]", "\"\<c\>\""}], "\[IndentingNewLine]", "}"}]}], 
+    ";"}], "\n", "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+    "the", " ", "following", " ", "function", " ", "fODE", " ", "defines", 
+     " ", "the", " ", "right", " ", "hand", " ", "side", " ", "of", " ", 
+     "the", " ", "ODE", " ", "system"}], " ", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"fODE", "[", 
+      RowBox[{"k_", ",", " ", "c_"}], "]"}], " ", ":=", " ", 
+     RowBox[{"{", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"A", " ", "*", " ", 
+         RowBox[{"k", "^", "alpha"}]}], " ", "-", " ", "c", " ", "-", " ", 
+        RowBox[{"k", " ", "*", " ", 
+         RowBox[{"(", 
+          RowBox[{"nPop", " ", "+", " ", "delta", " ", "+", " ", "gx"}], 
+          ")"}]}]}], ",", "  ", 
+       RowBox[{"(*", " ", "k_dot", " ", "*)"}], "\[IndentingNewLine]", 
+       RowBox[{"c", " ", "*", " ", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"alpha", " ", "*", " ", "A", " ", "*", " ", 
+            RowBox[{"k", "^", 
+             RowBox[{"(", 
+              RowBox[{"alpha", "-", "1"}], ")"}]}]}], " ", "-", " ", 
+           RowBox[{"(", 
+            RowBox[{"delta", " ", "+", " ", "rho", " ", "+", " ", 
+             RowBox[{"gx", "*", "theta"}]}], ")"}]}], ")"}], " ", "/", " ", 
+         "theta"}]}]}], "  ", 
+      RowBox[{"(*", " ", "c_dot", " ", "*)"}], "\[IndentingNewLine]", "}"}]}],
+     ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+    "number", " ", "of", " ", "conditions", " ", "and", " ", "equations"}], 
+    " ", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"nInitial", " ", "=", " ", "1"}], ";", " ", 
+    RowBox[{"(*", " ", 
+     RowBox[{
+     "number", " ", "of", " ", "initial", " ", "boundary", " ", 
+      "conditions"}], " ", "*)"}], "\n", 
+    RowBox[{"nFinal", " ", "=", " ", "1"}], ";", " ", 
+    RowBox[{"(*", " ", 
+     RowBox[{
+     "number", " ", "of", " ", "final", " ", "boundary", " ", "conditions"}], 
+     " ", "*)"}], "\n", 
+    RowBox[{"nStatic", " ", "=", " ", "0"}], ";", " ", 
+    RowBox[{"(*", " ", 
+     RowBox[{"number", " ", "of", " ", "static", " ", "equations"}], " ", 
+     "*)"}], "\n", "\[IndentingNewLine]", "\n", 
+    RowBox[{"(*", " ", 
+     RowBox[{
+     "computation", " ", "of", " ", "the", " ", "inital", " ", "and", " ", 
+      "final", " ", "steady", " ", "states", " ", "of", " ", "k", " ", "and", 
+      " ", "c"}], " ", "*)"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"kss", " ", "=", " ", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"delta", "+", "rho", "+", 
+           RowBox[{"gx", "*", "theta"}]}], ")"}], " ", "/", " ", "alpha"}], 
+        ")"}], "^", 
+       RowBox[{"(", 
+        RowBox[{"1", "/", 
+         RowBox[{"(", 
+          RowBox[{"alpha", "-", "1"}], ")"}]}], ")"}]}]}], ";"}]}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"css", " ", "=", " ", 
+     RowBox[{
+      RowBox[{"kss", "^", "alpha"}], " ", "-", " ", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"nPop", "+", "delta", "+", "gx"}], ")"}], "*", "kss"}]}]}], 
+    ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"initialValues", " ", "=", " ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"0.1", "*", "kss"}], ",", "css"}], "}"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"finalValues", " ", "=", " ", 
+     RowBox[{"{", 
+      RowBox[{"kss", ",", "css"}], "}"}]}], ";"}]}]}]], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["algorithm settings", "Subsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"timeFunc", "[", "tau_", "]"}], " ", "lets", " ", "you", " ", 
+     "adjust", " ", "the", " ", "temporal", " ", "gaps", " ", "between", " ", 
+     "the", " ", "mesh", " ", "points"}], ",", " ", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"where", " ", "0"}], " ", "\[LessEqual]", " ", "tau", " ", 
+      "\[LessEqual]", " ", "1"}], ";", " ", 
+     RowBox[{
+     "to", " ", "use", " ", "one", " ", "of", " ", "the", " ", "supplied", 
+      " ", "time", " ", "functions", " ", "just", " ", "uncomment", " ", "it",
+       " ", "and", " ", "comment", " ", "the", " ", "other", " ", "one"}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{
+     "you", " ", "can", " ", "also", " ", "create", " ", "your", " ", "own", 
+      " ", "time", " ", "function"}]}], ",", " ", 
+    RowBox[{
+     RowBox[{"where", " ", 
+      RowBox[{"timeFunc", "[", "0", "]"}]}], " ", "=", " ", "0"}]}], " ", 
+   "*)"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{"1.", " ", "supplied", " ", "time", " ", 
+     RowBox[{"function", ":", " ", "linear"}]}], ",", " ", 
+    RowBox[{
+    "tParam", " ", "regulates", " ", "the", " ", "size", " ", "of", " ", 
+     "the", " ", "time", " ", 
+     RowBox[{"interval", " ", "[", 
+      RowBox[{"0", ",", "tParam"}], "]"}]}]}], " ", "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"tParam", " ", "=", " ", "200"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"timeFunc", "[", "tau_", "]"}], " ", ":=", " ", 
+     RowBox[{"tParam", " ", "*", " ", "tau"}]}], ";"}], "\[IndentingNewLine]",
+    "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+     RowBox[{"2.", " ", "supplied", " ", "time", " ", 
+      RowBox[{"function", ":", " ", "nonlinear"}]}], ",", " ", 
+     RowBox[{
+     "tParam", " ", "regulates", " ", "the", " ", "distribution", " ", "of", 
+      " ", "the", " ", "mesh", " ", "points", " ", "over", " ", "time"}]}], 
+    " ", "*)"}], "\[IndentingNewLine]", 
+   RowBox[{"(*", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"tParam", " ", "=", " ", "0.2"}], ";", "\n", 
+     RowBox[{
+      RowBox[{"timeFunc", "[", "tau_", "]"}], " ", ":=", " ", 
+      RowBox[{"tau", " ", "/", " ", 
+       RowBox[{"(", 
+        RowBox[{"tParam", " ", "*", " ", 
+         RowBox[{"(", 
+          RowBox[{"1", "-", "tau"}], ")"}]}], ")"}]}]}], ";"}], " ", 
+    "\[IndentingNewLine]", "*)"}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"timeMax", " ", "=", " ", "140"}], ";"}], "    ", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+    "time", " ", "paths", " ", "will", " ", "be", " ", "shown", " ", "in", 
+     " ", "the", " ", 
+     RowBox[{"interval", " ", "[", 
+      RowBox[{"0", ",", "timeMax"}], "]"}]}], " ", "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"meshPoints", " ", "=", " ", "71"}], ";"}], "  ", 
+   RowBox[{"(*", " ", 
+    RowBox[{"number", " ", "of", " ", "mesh", " ", "points"}], " ", "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"equilibriumPrecision", " ", "=", " ", 
+     RowBox[{"10", "^", 
+      RowBox[{"-", "9"}]}]}], ";"}], " ", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+    "precision", " ", "of", " ", "the", " ", "equilibrium", " ", "at", " ", 
+     "finalValues"}], " ", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"errorCondFunc", " ", "=", "  ", "\"\<mean\>\""}], ";"}], " ", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+    "\"\<mean\>\"", " ", "or", " ", "\"\<max\>\"", " ", "function", " ", "to",
+      " ", "control", " ", "when", " ", "solution", " ", "is", " ", "precise",
+      " ", "enough"}], " ", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"solutionPrecision", " ", "=", " ", 
+     RowBox[{"10", "^", 
+      RowBox[{"-", "9"}]}]}], " ", ";"}], "  ", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+     RowBox[{"(", "relative", ")"}], " ", "precision", " ", "of", " ", "the", 
+     " ", "solution"}], " ", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"iterMax", " ", "=", " ", "20"}], ";"}], "  ", 
+   RowBox[{"(*", " ", 
+    RowBox[{"maximum", " ", "number", " ", "of", " ", "iterations"}], " ", 
+    "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"minSolutionValue", " ", "=", " ", 
+     RowBox[{"10", "^", 
+      RowBox[{"-", "6"}]}]}], ";", "  ", 
+    RowBox[{"(*", " ", 
+     RowBox[{
+      RowBox[{
+      "nonpositive", " ", "values", " ", "are", " ", "not", " ", "allowed", 
+       " ", "in", " ", "Jacobi", " ", "matrix"}], ";", " ", 
+      RowBox[{
+      "they", " ", "are", " ", "set", " ", "to", " ", "minSolutionValue"}]}], 
+     " ", "*)"}]}]}]}]], "Input",
+ CellChangeTimes->{{3.392397509078125*^9, 3.39239751228125*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["plot settings", "Subsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"graphs", " ", "to", " ", "plot"}], ";", " ", 
+     RowBox[{
+     "numbers", " ", "have", " ", "the", " ", "same", " ", "order", " ", "as",
+       " ", "in", " ", "the", " ", "ODEs"}]}], ",", " ", 
+    RowBox[{
+     RowBox[{"with", " ", "1"}], " ", "=", " ", "time"}]}], " ", "*)"}], "\n",
+   
+  RowBox[{
+   RowBox[{"plotIndex", " ", "=", " ", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"1", ",", "2"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"1", ",", "3"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"2", ",", "3"}], "}"}]}], "}"}]}], ";"}], " ", 
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{"t", ",", "k"}], ")"}], ",", " ", 
+    RowBox[{"(", 
+     RowBox[{"t", ",", "c"}], ")"}], ",", " ", 
+    RowBox[{"(", 
+     RowBox[{"k", ",", "c"}], ")"}]}], " ", "*)"}]}]], "Input"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Computation", "Section"],
+
+Cell[CellGroupData[{
+
+Cell["check for user input errors", "Subsection"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"nTotal", " ", "=", " ", 
+    RowBox[{"nInitial", "+", "nFinal", "+", "nStatic"}]}], ";"}], 
+  "\n"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"relax", "::", "numberOfVariables1"}], " ", "=", "\n", "\t", 
+   "\"\<Error: The total number of equations in fODE[] and fSTAT[] is not \
+equal to the number of variables, nInitial+nFinal+nStatic.\>\""}], 
+  ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"relax", "::", "numberOfVariables2"}], " ", "=", "\n", "\t", 
+   "\"\<Error: The total number of equations in fODE[] and fSTAT[] is not \
+equal to the number of variable names in variableNames (without time \
+t).\>\""}], ";", 
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{"SameQ", "[", 
+     RowBox[{
+      RowBox[{"Head", "[", 
+       RowBox[{"Apply", "[", 
+        RowBox[{"fSTAT", ",", "initialValues"}], "]"}], "]"}], ",", " ", 
+      "List"}], "]"}], ",", "  ", 
+    RowBox[{"(*", " ", 
+     RowBox[{
+      RowBox[{"fSTAT", "[", "]"}], " ", "has", " ", "been", " ", "defined"}], 
+     " ", "*)"}], "\n", "\t", 
+    RowBox[{"countFunc", " ", "=", " ", 
+     RowBox[{
+      RowBox[{"Length", "[", 
+       RowBox[{"Apply", "[", 
+        RowBox[{"fODE", ",", "initialValues"}], "]"}], "]"}], " ", "+", " ", 
+      RowBox[{"Length", "[", 
+       RowBox[{"Apply", "[", 
+        RowBox[{"fSTAT", ",", "initialValues"}], "]"}], "]"}]}]}], ",", "\n", 
+    "\t", 
+    RowBox[{"(*", " ", "else", " ", "*)"}], "\n", "\t", 
+    RowBox[{"countFunc", " ", "=", " ", 
+     RowBox[{"Length", "[", 
+      RowBox[{"Apply", "[", 
+       RowBox[{"fODE", ",", "initialValues"}], "]"}], "]"}]}]}], "\n", "]"}], 
+  ";"}], "\n", 
+ RowBox[{
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{"countFunc", " ", "\[NotEqual]", " ", "nTotal"}], ",", " ", 
+    RowBox[{"Message", "[", 
+     RowBox[{"relax", "::", "numberOfVariables1"}], "]"}]}], "]"}], 
+  ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"If", "[", 
+    RowBox[{
+     RowBox[{"countFunc", " ", "\[NotEqual]", " ", 
+      RowBox[{
+       RowBox[{"Length", "[", "variableNames", "]"}], "-", "1"}]}], ",", " ", 
+     
+     RowBox[{"Message", "[", 
+      RowBox[{"relax", "::", "numberOfVariables2"}], "]"}]}], "]"}], ";"}], 
+  "\n"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"relax", "::", "convergenceFinalValues"}], " ", "=", " ", 
+   "\"\<Warning: finalValues does not seem to be an equilibrium point; not \
+each value of fODE and/or fSTAT is near enough to zero, i.e. in the interval \
+[-equilibriumPrecision, equilibriumPrecision] = [-`1`, `1`].\>\""}], 
+  ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"If", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{
+        RowBox[{"Max", "[", 
+         RowBox[{"Abs", "[", 
+          RowBox[{"Apply", "[", 
+           RowBox[{"fODE", ",", "finalValues"}], "]"}], "]"}], "]"}], ">", 
+        "equilibriumPrecision"}], " ", "||", " ", 
+       RowBox[{
+        RowBox[{"Abs", "[", 
+         RowBox[{"Apply", "[", 
+          RowBox[{"fSTAT", ",", "finalValues"}], "]"}], "]"}], " ", ">", " ", 
+        "equilibriumPrecision"}]}], ",", 
+      RowBox[{"Message", "[", 
+       RowBox[{
+        RowBox[{"relax", "::", "convergenceFinalValues"}], ",", " ", 
+        "equilibriumPrecision"}], "]"}]}], "]"}], ";"}], "\n", "\n"}], 
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{"Caution", ":", " ", 
+     RowBox[{
+     "if", " ", "you", " ", "allow", " ", "more", " ", "than", " ", 
+      "\"\<mean\>\"", " ", "or", " ", "\"\<max\>\"", " ", "as", " ", 
+      "keywords", " ", "for", " ", "constructing", " ", "the", " ", 
+      "relative", " ", "error"}]}], ",", " ", 
+    RowBox[{
+    "do", " ", "not", " ", "forget", " ", "to", " ", "change", " ", "the", 
+     " ", "definition", " ", "of", " ", "relError", " ", "at", " ", "the", 
+     " ", "end", " ", "of", " ", "the", " ", "while", " ", "loop", " ", "in", 
+     " ", "the", " ", "last", " ", "subsection", " ", "of", " ", "the", " ", 
+     "computation", " ", "part"}]}], " ", "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"relax", "::", "errorCondFunc"}], " ", "=", " ", 
+   "\"\<Warning: The value \\\"`1`\\\" you used for the string variable \
+errorCondFunc is not allowed; use \\\"mean\\\" or \\\"max\\\" instead. In \
+this run \\\"max\\\" will be used.\>\""}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"errorCondFunc", "!=", "\"\<mean\>\""}], "&&", 
+     RowBox[{"errorCondFunc", "!=", "\"\<max\>\""}]}], ",", "\n", "\t", 
+    RowBox[{
+     RowBox[{"Message", "[", 
+      RowBox[{
+       RowBox[{"relax", "::", "\"\<errorCondFunc\>\""}], ",", 
+       "errorCondFunc"}], "]"}], ";", "\n", "\t", 
+     RowBox[{"errorCondFunc", " ", "=", " ", "\"\<max\>\""}], ";"}]}], "\n", 
+   "]"}], ";"}]}], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["computing boolean variables which reflect user input:", "Subsection"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"existStaticEq", " ", "=", " ", 
+   RowBox[{"If", "[", 
+    RowBox[{
+     RowBox[{"nStatic", " ", ">", " ", "0"}], ",", "True", ",", "False"}], 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"existFinalEq", " ", "=", " ", 
+   RowBox[{"If", "[", 
+    RowBox[{
+     RowBox[{"ValueQ", "[", "finalEqIndex", "]"}], ",", "True", ",", 
+     "False"}], "]"}]}], ";"}]}], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+computing the derivative of the time function, and the length of a time step\
+\>", "Subsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "construction", " ", "of", " ", "the", " ", "derivative", " ", "of", " ", 
+    "the", " ", "time", " ", "function"}], " ", "*)"}], "\[IndentingNewLine]",
+   
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"timeFuncDerivat", "[", "tau_", "]"}], " ", ":=", " ", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"Simplify", "[", 
+        RowBox[{"D", "[", 
+         RowBox[{
+          RowBox[{"timeFunc", "[", "timeVar", "]"}], ",", " ", "timeVar"}], 
+         "]"}], "]"}], " ", "/.", " ", 
+       RowBox[{"timeVar", "\[Rule]", "tau"}]}], ")"}]}], ";"}], 
+   "\[IndentingNewLine]", "\n", 
+   RowBox[{
+    RowBox[{"deltaTau", " ", "=", " ", 
+     RowBox[{"1", " ", "/", " ", 
+      RowBox[{"(", 
+       RowBox[{"meshPoints", " ", "-", " ", "1"}], ")"}]}]}], ";", "  ", 
+    RowBox[{"(*", " ", 
+     RowBox[{
+      RowBox[{"remember", ":", " ", 
+       RowBox[{
+       "0", " ", "\[LessEqual]", " ", "tau", " ", "\[LessEqual]", " ", 
+        "1"}]}], ",", " ", 
+      RowBox[{"and", " ", "the", " ", 
+       RowBox[{"interval", " ", "[", 
+        RowBox[{"0", ",", "1"}], "]"}], " ", "will", " ", "be", " ", 
+       "linearly", " ", "spaced", " ", "with", " ", "timestep", " ", 
+       "deltaTau"}]}], " ", "*)"}]}]}]}]], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ "computing the first instances of the solution and error vectors ",
+ StyleBox["solution",
+  FontSlant->"Italic"],
+ " and ",
+ StyleBox["error",
+  FontSlant->"Italic"],
+ ", and computing the time vector ",
+ StyleBox["timeList",
+  FontSlant->"Italic"]
+}], "Subsection"],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"(*", " ", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"solution", ":", 
+       RowBox[{"solution", " ", "vector", " ", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"var_", "1", 
+           RowBox[{"(", "t", ")"}]}], ",", 
+          RowBox[{"var_", "2", 
+           RowBox[{"(", "t", ")"}]}], ",", "...", ",", 
+          RowBox[{"var_n", 
+           RowBox[{"(", "t", ")"}]}]}], ")"}]}]}], ";", 
+      RowBox[{
+      "will", " ", "continually", " ", "be", " ", "updated", " ", "by", " ", 
+       "the", " ", "algorithm", "\n", "   ", 
+       RowBox[{"error", ":", 
+        RowBox[{"error", " ", "function"}]}]}]}], ",", 
+     RowBox[{
+     "which", " ", "should", " ", "vanish", " ", "by", " ", "iteratively", 
+      " ", "updating", " ", "solution"}]}], "\n", "*)"}],
+   FontTracking->"Plain",
+   FontVariations->{"CompatibilityType"->0,
+   "Masked"->False,
+   "Outline"->False,
+   "RotationAngle"->0,
+   "Shadow"->False,
+   "StrikeThrough"->False,
+   "Underline"->False}], 
+  StyleBox["\n",
+   FontTracking->"Plain",
+   FontVariations->{"CompatibilityType"->0,
+   "Masked"->False,
+   "Outline"->False,
+   "RotationAngle"->0,
+   "Shadow"->False,
+   "StrikeThrough"->False,
+   "Underline"->False}], 
+  StyleBox["\n",
+   FontTracking->"Plain",
+   FontVariations->{"CompatibilityType"->0,
+   "Masked"->False,
+   "Outline"->False,
+   "RotationAngle"->0,
+   "Shadow"->False,
+   "StrikeThrough"->False,
+   "Underline"->False}], 
+  RowBox[{
+   RowBox[{
+    RowBox[{"solution", " ", "=", " ", 
+     RowBox[{"Flatten", "[", 
+      RowBox[{"Table", "[", 
+       RowBox[{"finalValues", ",", 
+        RowBox[{"{", "meshPoints", "}"}]}], "]"}], "]"}]}], ";"}], "\n", 
+   "\[IndentingNewLine]", 
+   RowBox[{"errorFinal", " ", ":=", " ", 
+    RowBox[{"If", "[", 
+     RowBox[{"existFinalEq", ",", "\n", "\t", 
+      RowBox[{
+       RowBox[{"Apply", "[", 
+        RowBox[{"fODE", ",", 
+         RowBox[{"solution", "[", 
+          RowBox[{"[", 
+           RowBox[{"Range", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{
+               RowBox[{"(", 
+                RowBox[{"meshPoints", "-", "1"}], ")"}], "*", "nTotal"}], "+",
+               "1"}], ",", 
+             RowBox[{"meshPoints", "*", "nTotal"}]}], "]"}], "]"}], "]"}]}], 
+        "]"}], "[", 
+       RowBox[{"[", "finalEqIndex", "]"}], "]"}], ",", "\n", "\t", 
+      RowBox[{"(*", " ", "else", " ", "*)"}], "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"solution", "[", 
+        RowBox[{"[", 
+         RowBox[{"Range", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{"meshPoints", "-", "1"}], ")"}], "*", "nTotal"}], "+", 
+            "nInitial", "+", "1"}], ",", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{"meshPoints", "-", "1"}], ")"}], "*", "nTotal"}], "+", 
+            "nInitial", "+", "nFinal"}]}], "]"}], "]"}], "]"}], "-", 
+       RowBox[{"finalValues", "[", 
+        RowBox[{"[", 
+         RowBox[{"Range", "[", 
+          RowBox[{
+           RowBox[{"nInitial", "+", "1"}], ",", 
+           RowBox[{"nInitial", "+", "nFinal"}]}], "]"}], "]"}], "]"}]}]}], 
+     "\n", " ", "]"}]}], "\n", 
+   RowBox[{
+    RowBox[{"error", " ", "=", " ", 
+     RowBox[{"If", "[", 
+      RowBox[{"existStaticEq", ",", "\[IndentingNewLine]", 
+       RowBox[{"Flatten", "[", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"solution", "[", 
+            RowBox[{"[", 
+             RowBox[{"Range", "[", "nInitial", "]"}], "]"}], "]"}], "-", 
+           RowBox[{"initialValues", "[", 
+            RowBox[{"[", 
+             RowBox[{"Range", "[", "nInitial", "]"}], "]"}], "]"}]}], ",", 
+          RowBox[{"Apply", "[", 
+           RowBox[{"fSTAT", ",", 
+            RowBox[{"solution", "[", 
+             RowBox[{"[", 
+              RowBox[{"Range", "[", "nTotal", "]"}], "]"}], "]"}]}], "]"}], 
+          ",", 
+          RowBox[{"Table", "[", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"Table", "[", 
+                RowBox[{
+                 RowBox[{
+                  RowBox[{"solution", "[", 
+                   RowBox[{"[", 
+                    RowBox[{
+                    RowBox[{"nTotal", "*", "i"}], "+", "j"}], "]"}], "]"}], 
+                  "-", 
+                  RowBox[{"solution", "[", 
+                   RowBox[{"[", 
+                    RowBox[{
+                    RowBox[{"nTotal", "*", "i"}], "-", "nTotal", "+", "j"}], 
+                    "]"}], "]"}]}], ",", 
+                 RowBox[{"{", 
+                  RowBox[{"j", ",", "1", ",", 
+                   RowBox[{"nTotal", "-", "nStatic"}]}], "}"}]}], "]"}], "-", 
+               
+               RowBox[{"deltaTau", "*", 
+                RowBox[{"Apply", "[", 
+                 RowBox[{"fODE", ",", 
+                  RowBox[{"Table", "[", 
+                   RowBox[{
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"solution", "[", 
+                    RowBox[{"[", 
+                    RowBox[{
+                    RowBox[{"nTotal", "*", "i"}], "+", "j"}], "]"}], "]"}], 
+                    "+", 
+                    RowBox[{"solution", "[", 
+                    RowBox[{"[", 
+                    RowBox[{
+                    RowBox[{"nTotal", "*", "i"}], "-", "nTotal", "+", "j"}], 
+                    "]"}], "]"}]}], ")"}], "/", "2"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"j", ",", "1", ",", "nTotal"}], "}"}]}], "]"}]}], 
+                 "]"}], " ", "*", "  ", 
+                RowBox[{"timeFuncDerivat", "[", 
+                 RowBox[{
+                  RowBox[{"(", 
+                   RowBox[{
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{"i", "-", "1"}], ")"}], "*", "deltaTau"}], " ", 
+                    "+", " ", 
+                    RowBox[{"i", "*", "deltaTau"}]}], ")"}], "/", "2"}], 
+                 "]"}]}]}], ",", 
+              RowBox[{"Apply", "[", 
+               RowBox[{"fSTAT", ",", 
+                RowBox[{"Table", "[", 
+                 RowBox[{
+                  RowBox[{"solution", "[", 
+                   RowBox[{"[", 
+                    RowBox[{
+                    RowBox[{"nTotal", "*", "i"}], "+", "j"}], "]"}], "]"}], 
+                  ",", 
+                  RowBox[{"{", 
+                   RowBox[{"j", ",", "1", ",", "nTotal"}], "}"}]}], "]"}]}], 
+               "]"}]}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"i", ",", "1", ",", 
+              RowBox[{"meshPoints", "-", "1"}]}], "}"}]}], "]"}], ",", 
+          "errorFinal"}], "}"}], "]"}], ",", "\[IndentingNewLine]", 
+       RowBox[{"(*", " ", "else", " ", "*)"}], "\[IndentingNewLine]", 
+       RowBox[{"Flatten", "[", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"solution", "[", 
+            RowBox[{"[", 
+             RowBox[{"Range", "[", "nInitial", "]"}], "]"}], "]"}], "-", 
+           RowBox[{"initialValues", "[", 
+            RowBox[{"[", 
+             RowBox[{"Range", "[", "nInitial", "]"}], "]"}], "]"}]}], ",", 
+          RowBox[{"Table", "[", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"Table", "[", 
+               RowBox[{
+                RowBox[{
+                 RowBox[{"solution", "[", 
+                  RowBox[{"[", 
+                   RowBox[{
+                    RowBox[{"nTotal", "*", "i"}], "+", "j"}], "]"}], "]"}], 
+                 "-", 
+                 RowBox[{"solution", "[", 
+                  RowBox[{"[", 
+                   RowBox[{
+                    RowBox[{"nTotal", "*", "i"}], "-", "nTotal", "+", "j"}], 
+                   "]"}], "]"}]}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"j", ",", "1", ",", 
+                  RowBox[{"nTotal", "-", "nStatic"}]}], "}"}]}], "]"}], "-", 
+              RowBox[{"deltaTau", "*", 
+               RowBox[{"Apply", "[", 
+                RowBox[{"fODE", ",", 
+                 RowBox[{"Table", "[", 
+                  RowBox[{
+                   RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"solution", "[", 
+                    RowBox[{"[", 
+                    RowBox[{
+                    RowBox[{"nTotal", "*", "i"}], "+", "j"}], "]"}], "]"}], 
+                    "+", 
+                    RowBox[{"solution", "[", 
+                    RowBox[{"[", 
+                    RowBox[{
+                    RowBox[{"nTotal", "*", "i"}], "-", "nTotal", "+", "j"}], 
+                    "]"}], "]"}]}], ")"}], "/", "2"}], ",", 
+                   RowBox[{"{", 
+                    RowBox[{"j", ",", "1", ",", "nTotal"}], "}"}]}], "]"}]}], 
+                "]"}], " ", "*", "  ", 
+               RowBox[{"timeFuncDerivat", "[", 
+                RowBox[{
+                 RowBox[{"(", 
+                  RowBox[{
+                   RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{"i", "-", "1"}], ")"}], "*", "deltaTau"}], " ", 
+                   "+", " ", 
+                   RowBox[{"i", "*", "deltaTau"}]}], ")"}], "/", "2"}], 
+                "]"}]}]}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"i", ",", "1", ",", 
+              RowBox[{"meshPoints", "-", "1"}]}], "}"}]}], "]"}], ",", 
+          "errorFinal"}], "}"}], "]"}]}], "\[IndentingNewLine]", "]"}]}], 
+    ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"tauListReduced", " ", "=", " ", 
+     RowBox[{"Range", "[", 
+      RowBox[{"0", ",", 
+       RowBox[{"1", "-", "deltaTau"}], ",", "deltaTau"}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"timeFunc", "[", "1", "]"}], " ", "may", " ", "not", " ", "be", 
+      " ", "a", " ", "real", " ", "number"}], " ", "\[Rule]", " ", 
+     RowBox[{"insert", " ", "Infinity"}]}], " ", "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Off", "[", 
+     RowBox[{"Power", "::", "infy"}], "]"}], ";"}], " ", "\n", 
+   RowBox[{
+    RowBox[{"timeList", " ", "=", " ", 
+     RowBox[{"N", "[", 
+      RowBox[{"Append", "[", 
+       RowBox[{
+        RowBox[{"Map", "[", 
+         RowBox[{"timeFunc", ",", "tauListReduced"}], "]"}], ",", " ", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{"NumberQ", "[", 
+           RowBox[{"timeFunc", "[", "1", "]"}], "]"}], ",", 
+          RowBox[{"timeFunc", "[", "1", "]"}], ",", "Infinity"}], "]"}]}], 
+       "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"On", "[", 
+     RowBox[{"Power", "::", "infy"}], "]"}], ";"}]}]}]], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ "The Jacobian matrix ",
+ StyleBox["jac",
+  FontSlant->"Italic"],
+ " is constructed, so that ",
+ StyleBox["jac",
+  FontSlant->"Italic"],
+ "(",
+ StyleBox["solution",
+  FontSlant->"Italic"],
+ ") * ",
+ StyleBox["deltaSolution",
+  FontSlant->"Italic"],
+ " = -",
+ StyleBox["error",
+  FontSlant->"Italic"],
+ "(",
+ StyleBox["solution",
+  FontSlant->"Italic"],
+ ") can be solved for ",
+ StyleBox["deltaSolution",
+  FontSlant->"Italic"],
+ " and ",
+ StyleBox["deltaSolution",
+  FontSlant->"Italic"],
+ " added to ",
+ StyleBox["solution",
+  FontSlant->"Italic"],
+ ". This will be iterated until the relative error, i.e. ",
+ StyleBox["error",
+  FontSlant->"Italic"],
+ "/",
+ StyleBox["solution",
+  FontSlant->"Italic"],
+ ", is smaller than ",
+ StyleBox["solutionPrecision",
+  FontSlant->"Italic"],
+ " or the maximum number of iterations, ",
+ StyleBox["iterMax",
+  FontSlant->"Italic"],
+ ", has been reached. Then the solution matrix with (",
+ StyleBox["time",
+  FontSlant->"Italic"],
+ ", ",
+ StyleBox["var_1",
+  FontSlant->"Italic"],
+ ", ",
+ StyleBox["var_2",
+  FontSlant->"Italic"],
+ ", ..., ",
+ StyleBox["var_n",
+  FontSlant->"Italic"],
+ ") is constructed."
+}], "Subsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"tComputation", " ", "=", " ", 
+   RowBox[{"Timing", "[", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+    RowBox[{"(*", " ", 
+     RowBox[{
+      RowBox[{
+      "Jacobi", " ", "matrix", " ", "jac", " ", "consists", " ", "of", " ", 
+       "blocks", " ", "jacLeft", " ", "and", " ", "jacRight", " ", "which", 
+       " ", "are", " ", "first", " ", "constructed", " ", "in", " ", 
+       "symbolic", " ", "form"}], ",", " ", 
+      RowBox[{
+      "to", " ", "be", " ", "filled", " ", "in", " ", "later", " ", "with", 
+       " ", "real", " ", 
+       RowBox[{"values", ".", " ", "The"}], " ", "last", " ", "rows", " ", 
+       "of", " ", "jac", " ", "depend", " ", "on", " ", "whether", " ", 
+       "final", " ", "conditions", " ", "are", " ", "given", " ", "directly", 
+       " ", "by", " ", "concrete", " ", "values", " ", "in", " ", 
+       "finalValues", " ", "or", " ", "indirectly", " ", "by", " ", "ODEs", 
+       " ", "which", " ", "have", " ", "to", " ", "be", " ", "fullfilled", 
+       " ", "at", " ", "the", " ", "end"}], ",", " ", 
+      RowBox[{"designated", " ", "by", " ", "finalEqIndex"}]}], " ", "*)"}], 
+    "\[IndentingNewLine]", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"upper", " ", "=", " ", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{"xUpper", "[", "i", "]"}], ",", " ", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", "nTotal"}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"lower", " ", "=", " ", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{"xLower", "[", "i", "]"}], ",", " ", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", "nTotal"}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{"existStaticEq", ",", 
+       RowBox[{
+        RowBox[{"jacLeft", " ", "=", " ", 
+         RowBox[{"D", "[", 
+          RowBox[{
+           RowBox[{"Flatten", "[", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"upper", "[", 
+                RowBox[{"[", 
+                 RowBox[{"Range", "[", 
+                  RowBox[{"nInitial", "+", "nFinal"}], "]"}], "]"}], "]"}], 
+               "-", 
+               RowBox[{"lower", "[", 
+                RowBox[{"[", 
+                 RowBox[{"Range", "[", 
+                  RowBox[{"nInitial", "+", "nFinal"}], "]"}], "]"}], "]"}], 
+               "-", 
+               RowBox[{"deltaTau", "*", 
+                RowBox[{"Apply", "[", 
+                 RowBox[{"fODE", ",", 
+                  RowBox[{
+                   RowBox[{"(", 
+                    RowBox[{"upper", "+", "lower"}], ")"}], "/", "2"}]}], 
+                 "]"}], "*", 
+                RowBox[{"timeFuncDerivat", "[", "tau", "]"}]}]}], ",", 
+              RowBox[{"Apply", "[", 
+               RowBox[{"fSTAT", ",", "upper"}], "]"}]}], "}"}], "]"}], ",", 
+           RowBox[{"{", "lower", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]",
+         
+        RowBox[{"jacRight", " ", "=", " ", 
+         RowBox[{"D", "[", 
+          RowBox[{
+           RowBox[{"Flatten", "[", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"upper", "[", 
+                RowBox[{"[", 
+                 RowBox[{"Range", "[", 
+                  RowBox[{"nInitial", "+", "nFinal"}], "]"}], "]"}], "]"}], 
+               "-", 
+               RowBox[{"lower", "[", 
+                RowBox[{"[", 
+                 RowBox[{"Range", "[", 
+                  RowBox[{"nInitial", "+", "nFinal"}], "]"}], "]"}], "]"}], 
+               "-", 
+               RowBox[{"deltaTau", "*", 
+                RowBox[{"Apply", "[", 
+                 RowBox[{"fODE", ",", 
+                  RowBox[{
+                   RowBox[{"(", 
+                    RowBox[{"upper", "+", "lower"}], ")"}], "/", "2"}]}], 
+                 "]"}], "*", 
+                RowBox[{"timeFuncDerivat", "[", "tau", "]"}]}]}], ",", 
+              RowBox[{"Apply", "[", 
+               RowBox[{"fSTAT", ",", "upper"}], "]"}]}], "}"}], "]"}], ",", 
+           RowBox[{"{", "upper", "}"}]}], "]"}]}], ";"}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"(*", " ", "else", " ", "*)"}], "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"jacLeft", " ", "=", " ", 
+         RowBox[{"D", "[", 
+          RowBox[{
+           RowBox[{"Flatten", "[", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"upper", "[", 
+               RowBox[{"[", 
+                RowBox[{"Range", "[", 
+                 RowBox[{"nInitial", "+", "nFinal"}], "]"}], "]"}], "]"}], 
+              "-", 
+              RowBox[{"lower", "[", 
+               RowBox[{"[", 
+                RowBox[{"Range", "[", 
+                 RowBox[{"nInitial", "+", "nFinal"}], "]"}], "]"}], "]"}], 
+              "-", 
+              RowBox[{"deltaTau", "*", 
+               RowBox[{"Apply", "[", 
+                RowBox[{"fODE", ",", 
+                 RowBox[{
+                  RowBox[{"(", 
+                   RowBox[{"upper", "+", "lower"}], ")"}], "/", "2"}]}], 
+                "]"}], "*", 
+               RowBox[{"timeFuncDerivat", "[", "tau", "]"}]}]}], "}"}], "]"}],
+            ",", 
+           RowBox[{"{", "lower", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]",
+         
+        RowBox[{"jacRight", " ", "=", " ", 
+         RowBox[{"D", "[", 
+          RowBox[{
+           RowBox[{"Flatten", "[", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"upper", "[", 
+               RowBox[{"[", 
+                RowBox[{"Range", "[", 
+                 RowBox[{"nInitial", "+", "nFinal"}], "]"}], "]"}], "]"}], 
+              "-", 
+              RowBox[{"lower", "[", 
+               RowBox[{"[", 
+                RowBox[{"Range", "[", 
+                 RowBox[{"nInitial", "+", "nFinal"}], "]"}], "]"}], "]"}], 
+              "-", 
+              RowBox[{"deltaTau", "*", 
+               RowBox[{"Apply", "[", 
+                RowBox[{"fODE", ",", 
+                 RowBox[{
+                  RowBox[{"(", 
+                   RowBox[{"upper", "+", "lower"}], ")"}], "/", "2"}]}], 
+                "]"}], "*", 
+               RowBox[{"timeFuncDerivat", "[", "tau", "]"}]}]}], "}"}], "]"}],
+            ",", 
+           RowBox[{"{", "upper", "}"}]}], "]"}]}], ";"}]}], 
+      "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+     "\[IndentingNewLine]", 
+     RowBox[{"jacFinal", " ", "=", " ", 
+      RowBox[{"If", "[", 
+       RowBox[{"existFinalEq", ",", "\[IndentingNewLine]", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"Flatten", "[", 
+           RowBox[{
+            RowBox[{"Table", "[", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"nInitial", "+", "nStatic", "+", 
+                 RowBox[{
+                  RowBox[{"(", 
+                   RowBox[{"meshPoints", "-", "1"}], ")"}], "*", "nTotal"}], 
+                 "+", "j"}], ",", 
+                RowBox[{
+                 RowBox[{
+                  RowBox[{"(", 
+                   RowBox[{"meshPoints", "-", "1"}], ")"}], "*", "nTotal"}], 
+                 "+", "k"}]}], "}"}], ",", " ", 
+              RowBox[{"{", 
+               RowBox[{"j", ",", "nFinal"}], "}"}], ",", " ", 
+              RowBox[{"{", 
+               RowBox[{"k", ",", "nTotal"}], "}"}]}], "]"}], ",", "1"}], 
+           "]"}], ",", "\[IndentingNewLine]", 
+          RowBox[{"Flatten", "[", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{"D", "[", 
+               RowBox[{
+                RowBox[{"Apply", "[", 
+                 RowBox[{"fODE", ",", "lower"}], "]"}], ",", " ", 
+                RowBox[{"{", "lower", "}"}]}], "]"}], " ", "/.", " ", 
+              RowBox[{"MapThread", "[", 
+               RowBox[{"RuleDelayed", ",", 
+                RowBox[{"{", 
+                 RowBox[{"lower", ",", 
+                  RowBox[{"solution", "[", 
+                   RowBox[{"[", 
+                    RowBox[{"Range", "[", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{"meshPoints", "-", "1"}], ")"}], "*", "nTotal"}], 
+                    "+", "1"}], ",", 
+                    RowBox[{"meshPoints", "*", "nTotal"}]}], "]"}], "]"}], 
+                   "]"}]}], "}"}]}], "]"}]}], ")"}], "[", 
+            RowBox[{"[", "finalEqIndex", "]"}], "]"}], "]"}]}], "}"}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{"(*", " ", "else", " ", "*)"}], "\n", "\t\t\t", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"Table", "[", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"nInitial", "+", "nStatic", "+", 
+               RowBox[{
+                RowBox[{"(", 
+                 RowBox[{"meshPoints", "-", "1"}], ")"}], "*", "nTotal"}], 
+               "+", "j"}], ",", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"(", 
+                 RowBox[{"meshPoints", "-", "1"}], ")"}], "*", "nTotal"}], 
+               "+", "nInitial", "+", "j"}]}], "}"}], ",", " ", 
+            RowBox[{"{", 
+             RowBox[{"j", ",", "1", ",", "nFinal"}], "}"}]}], "]"}], ",", 
+          RowBox[{"Table", "[", 
+           RowBox[{"1", ",", " ", 
+            RowBox[{"{", "nFinal", "}"}]}], "]"}]}], "}"}]}], 
+       "\[IndentingNewLine]", "]"}]}], ";", "\[IndentingNewLine]", 
+     "\[IndentingNewLine]", 
+     RowBox[{"relError", " ", "=", " ", 
+      RowBox[{"solutionPrecision", " ", "+", " ", "1"}]}], ";", "  ", 
+     RowBox[{"(*", " ", 
+      RowBox[{
+      "relError", " ", "must", " ", "initially", " ", "be", " ", "greater", 
+       " ", "than", " ", "solutionPrecision", " ", "because", " ", "of", " ", 
+       "head", " ", "of", " ", "while", " ", "loop", " ", "below"}], " ", 
+      "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"meanRelErrorList", " ", "=", " ", 
+      RowBox[{"maxRelErrorList", " ", "=", " ", 
+       RowBox[{"{", "}"}]}]}], ";", "  ", 
+     RowBox[{"(*", " ", 
+      RowBox[{"used", " ", "for", " ", "bookkeeping"}], " ", "*)"}], 
+     "\[IndentingNewLine]", 
+     RowBox[{"iterCount", " ", "=", " ", "1"}], ";", "\[IndentingNewLine]", 
+     "\n", 
+     RowBox[{"(*", " ", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"In", " ", "the", " ", "following", " ", "while"}], "-", 
+        RowBox[{
+        "loop", " ", "the", " ", "Jacobi", " ", "matrix", " ", "jac", " ", 
+         "is", " ", "constructed", " ", "as", " ", "a", " ", "Mathematica", 
+         " ", "sparse", " ", 
+         RowBox[{"array", ".", " ", "The"}], " ", "positions", " ", "of", " ",
+          "the", " ", "nonzero", " ", "matrix", " ", "values", " ", "are", 
+         " ", "stored", " ", "in", " ", "the", " ", "list", " ", 
+         "jacPosition"}]}], ",", " ", 
+       RowBox[{
+       "the", " ", "values", " ", "themselves", " ", "are", " ", "stored", 
+        " ", "in", " ", "the", " ", "list", " ", "jacValue"}], ",", " ", 
+       RowBox[{
+       "constructed", " ", "by", " ", "using", " ", "the", " ", "symbolic", 
+        " ", "block", " ", "matrices", " ", "jacLeft"}], ",", " ", 
+       RowBox[{
+       "jacRight", " ", "and", " ", "the", " ", "symbolic", " ", "final", " ",
+         "matrix", " ", 
+        RowBox[{"jacFinal", ".", " ", "During"}], " ", "the", " ", "process", 
+        " ", "of", " ", "adding", " ", "matrix", " ", "blocks", " ", "the", 
+        " ", "lists", " ", "jacPosition", " ", "and", " ", "jacValue", " ", 
+        "get", " ", "deeply", " ", "nested"}], ",", " ", 
+       RowBox[{
+       "only", " ", "to", " ", "be", " ", "flattened", " ", "in", " ", "the", 
+        " ", "end"}], ",", " ", 
+       RowBox[{
+        RowBox[{
+        "just", " ", "before", " ", "constructing", " ", "the", " ", "sparse",
+          " ", "array"}], ";", " ", 
+        RowBox[{
+        "this", " ", "looks", " ", "ugly", " ", "but", " ", "is", " ", "more",
+          " ", "efficient", " ", "than", " ", "flattening", " ", "the", " ", 
+         "lists", " ", "every", " ", "time", " ", "after", " ", "appending", 
+         " ", "another", " ", 
+         RowBox[{"block", ".", "\[IndentingNewLine]", "After"}], " ", "the", 
+         " ", "sparse", " ", "matrix", " ", "jac", " ", "has", " ", "been", 
+         " ", "constructed"}]}], ",", " ", 
+       RowBox[{
+        RowBox[{"the", " ", "equation", " ", "jac", 
+         RowBox[{"(", "solution", ")"}], "*", "deltaSolution"}], " ", "=", 
+        " ", 
+        RowBox[{
+         RowBox[{"-", "error"}], 
+         RowBox[{"(", "solution", ")"}], " ", "is", " ", "solved", " ", "for",
+          " ", "deltaSolution"}]}], ",", " ", 
+       RowBox[{
+       "then", " ", "deltaSolution", " ", "is", " ", "added", " ", "to", " ", 
+        "solution"}], ",", " ", 
+       RowBox[{
+       "the", " ", "new", " ", "error", " ", "function", " ", "error", 
+        RowBox[{"(", "solution", ")"}], " ", "is", " ", "computed"}], ",", 
+       " ", "and"}], " ", "*)"}], "\[IndentingNewLine]", 
+     "\[IndentingNewLine]", 
+     RowBox[{"While", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"relError", ">", "solutionPrecision"}], " ", "&&", 
+        RowBox[{"iterCount", "<", 
+         RowBox[{"iterMax", "+", "1"}]}]}], ",", "\[IndentingNewLine]", 
+       "\[IndentingNewLine]", 
+       RowBox[{"(*", " ", 
+        RowBox[{
+        "Jacobi", " ", "matrix", " ", "jac", " ", "will", " ", "be", " ", 
+         "constructed", " ", "in", " ", "groups", " ", "of", " ", "n", " ", 
+         "rows"}], " ", "*)"}], "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"jacPosition", " ", "=", " ", 
+         RowBox[{"{", "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"Table", "[", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"i", ",", "i"}], "}"}], ",", " ", 
+             RowBox[{"{", 
+              RowBox[{"i", ",", "nInitial"}], "}"}]}], "]"}], ",", " ", 
+           RowBox[{"Table", "[", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"i", ",", "j"}], "}"}], ",", " ", 
+             RowBox[{"{", 
+              RowBox[{"i", ",", 
+               RowBox[{"nInitial", "+", "1"}], ",", 
+               RowBox[{"nInitial", "+", "nStatic"}]}], "}"}], ",", " ", 
+             RowBox[{"{", 
+              RowBox[{"j", ",", "nTotal"}], "}"}]}], "]"}]}], 
+          "\[IndentingNewLine]", "}"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"jacValue", " ", "=", 
+         RowBox[{"If", "[", 
+          RowBox[{"existStaticEq", ",", "\[IndentingNewLine]", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"Table", "[", 
+              RowBox[{"1", ",", " ", 
+               RowBox[{"{", "nInitial", "}"}]}], "]"}], ",", " ", 
+             RowBox[{
+              RowBox[{"D", "[", 
+               RowBox[{
+                RowBox[{"Apply", "[", 
+                 RowBox[{"fSTAT", ",", "lower"}], "]"}], ",", 
+                RowBox[{"{", "lower", "}"}]}], "]"}], "/.", 
+              RowBox[{"Flatten", "[", 
+               RowBox[{"{", 
+                RowBox[{"Thread", "[", 
+                 RowBox[{"lower", "\[Rule]", 
+                  RowBox[{"solution", "[", 
+                   RowBox[{"[", 
+                    RowBox[{"Range", "[", "nTotal", "]"}], "]"}], "]"}]}], 
+                 "]"}], "}"}], "]"}]}]}], "}"}], ",", "\[IndentingNewLine]", 
+           RowBox[{"Table", "[", 
+            RowBox[{"1", ",", " ", 
+             RowBox[{"{", "nInitial", "}"}]}], "]"}]}], "\[IndentingNewLine]",
+           "]"}]}], ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+        RowBox[{"For", "[", 
+         RowBox[{
+          RowBox[{"i", "=", "1"}], ",", 
+          RowBox[{"i", "<", "meshPoints"}], ",", 
+          RowBox[{"i", "++"}], ",", "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"jacPosition", " ", "=", 
+            RowBox[{"{", "\[IndentingNewLine]", 
+             RowBox[{"jacPosition", ",", " ", 
+              RowBox[{"Table", "[", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{"j", ",", "k"}], "}"}], ",", " ", 
+                RowBox[{"{", 
+                 RowBox[{"j", ",", 
+                  RowBox[{"nInitial", "+", "nStatic", "+", 
+                   RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{"i", "-", "1"}], ")"}], "*", "nTotal"}], "+", 
+                   "1"}], ",", 
+                  RowBox[{"nInitial", "+", "nStatic", "+", 
+                   RowBox[{"i", "*", "nTotal"}]}]}], "}"}], ",", " ", 
+                RowBox[{"{", 
+                 RowBox[{"k", ",", 
+                  RowBox[{
+                   RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{"i", "-", "1"}], ")"}], "*", "nTotal"}], "+", 
+                   "1"}], ",", 
+                  RowBox[{"i", "*", "nTotal"}]}], "}"}]}], "]"}]}], 
+             "\[IndentingNewLine]", "}"}]}], ";", "\[IndentingNewLine]", 
+           RowBox[{"jacValue", " ", "=", " ", 
+            RowBox[{"{", "\[IndentingNewLine]", 
+             RowBox[{"jacValue", ",", " ", 
+              RowBox[{"jacLeft", "/.", 
+               RowBox[{"Flatten", "[", 
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{"Thread", "[", 
+                   RowBox[{"lower", "\[Rule]", 
+                    RowBox[{"solution", "[", 
+                    RowBox[{"[", 
+                    RowBox[{"Range", "[", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"nTotal", "*", "i"}], "-", 
+                    RowBox[{"(", 
+                    RowBox[{"nTotal", "-", "1"}], ")"}]}], ",", 
+                    RowBox[{"nTotal", "*", "i"}]}], "]"}], "]"}], "]"}]}], 
+                   "]"}], ",", 
+                  RowBox[{"Thread", "[", 
+                   RowBox[{"upper", "\[Rule]", 
+                    RowBox[{"solution", "[", 
+                    RowBox[{"[", 
+                    RowBox[{"Range", "[", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"nTotal", "*", "i"}], "+", "1"}], ",", 
+                    RowBox[{
+                    RowBox[{"nTotal", "*", "i"}], "+", "nTotal"}]}], "]"}], 
+                    "]"}], "]"}]}], "]"}], ",", " ", 
+                  RowBox[{"tau", "\[Rule]", 
+                   RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{"i", "-", "1"}], ")"}], "*", "deltaTau"}], " ", 
+                    "+", " ", 
+                    RowBox[{"i", "*", "deltaTau"}]}], ")"}], "/", "2"}], 
+                    ")"}]}]}], "}"}], "]"}]}]}], "\[IndentingNewLine]", 
+             "}"}]}], ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+           RowBox[{"jacPosition", " ", "=", " ", 
+            RowBox[{"{", "\[IndentingNewLine]", 
+             RowBox[{"jacPosition", ",", " ", 
+              RowBox[{"Table", "[", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{"j", ",", "k"}], "}"}], ",", " ", 
+                RowBox[{"{", 
+                 RowBox[{"j", ",", 
+                  RowBox[{"nInitial", "+", "nStatic", "+", 
+                   RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{"i", "-", "1"}], ")"}], "*", "nTotal"}], "+", 
+                   "1"}], ",", 
+                  RowBox[{"nInitial", "+", "nStatic", "+", 
+                   RowBox[{"i", "*", "nTotal"}]}]}], "}"}], ",", " ", 
+                RowBox[{"{", 
+                 RowBox[{"k", ",", 
+                  RowBox[{
+                   RowBox[{"i", "*", "nTotal"}], "+", "1"}], ",", 
+                  RowBox[{
+                   RowBox[{"(", 
+                    RowBox[{"i", "+", "1"}], ")"}], "*", "nTotal"}]}], 
+                 "}"}]}], "]"}]}], "\[IndentingNewLine]", "}"}]}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"jacValue", " ", "=", " ", 
+            RowBox[{"{", "\[IndentingNewLine]", 
+             RowBox[{"jacValue", ",", " ", 
+              RowBox[{"jacRight", "/.", 
+               RowBox[{"Flatten", "[", 
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{"Thread", "[", 
+                   RowBox[{"lower", "\[Rule]", 
+                    RowBox[{"solution", "[", 
+                    RowBox[{"[", 
+                    RowBox[{"Range", "[", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"nTotal", "*", "i"}], "-", 
+                    RowBox[{"(", 
+                    RowBox[{"nTotal", "-", "1"}], ")"}]}], ",", 
+                    RowBox[{"nTotal", "*", "i"}]}], "]"}], "]"}], "]"}]}], 
+                   "]"}], ",", 
+                  RowBox[{"Thread", "[", 
+                   RowBox[{"upper", "\[Rule]", 
+                    RowBox[{"solution", "[", 
+                    RowBox[{"[", 
+                    RowBox[{"Range", "[", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"nTotal", "*", "i"}], "+", "1"}], ",", 
+                    RowBox[{
+                    RowBox[{"nTotal", "*", "i"}], "+", "nTotal"}]}], "]"}], 
+                    "]"}], "]"}]}], "]"}], ",", " ", 
+                  RowBox[{"tau", "\[Rule]", 
+                   RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{"i", "-", "1"}], ")"}], "*", "deltaTau"}], " ", 
+                    "+", " ", 
+                    RowBox[{"i", "*", "deltaTau"}]}], ")"}], "/", "2"}], 
+                    ")"}]}]}], "}"}], "]"}]}]}], "\[IndentingNewLine]", 
+             "}"}]}], ";"}]}], "\[IndentingNewLine]", "]"}], ";", " ", 
+        RowBox[{"(*", " ", 
+         RowBox[{"end", " ", "of", " ", "for", " ", "loop"}], " ", "*)"}], 
+        "\[IndentingNewLine]", "\[IndentingNewLine]", 
+        RowBox[{"jacPosition", " ", "=", " ", 
+         RowBox[{"{", 
+          RowBox[{"jacPosition", ",", " ", 
+           RowBox[{"jacFinal", "[", 
+            RowBox[{"[", "1", "]"}], "]"}]}], "}"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"jacValue", " ", "=", " ", 
+         RowBox[{"{", 
+          RowBox[{"jacValue", ",", " ", 
+           RowBox[{"jacFinal", "[", 
+            RowBox[{"[", "2", "]"}], "]"}]}], "}"}]}], ";", 
+        "\[IndentingNewLine]", "\[IndentingNewLine]", 
+        RowBox[{"jac", " ", "=", " ", 
+         RowBox[{"SparseArray", "[", 
+          RowBox[{"Rule", "[", "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{"Partition", "[", 
+             RowBox[{
+              RowBox[{"Flatten", "[", "jacPosition", "]"}], ",", "2"}], "]"}],
+             ",", "\[IndentingNewLine]", 
+            RowBox[{"N", "[", 
+             RowBox[{"Flatten", "[", "jacValue", "]"}], "]"}]}], "]"}], 
+          "\[IndentingNewLine]", "]"}]}], ";", "\[IndentingNewLine]", 
+        "\[IndentingNewLine]", 
+        RowBox[{"(*", " ", 
+         RowBox[{
+          RowBox[{"solving", "  ", "jac", 
+           RowBox[{"(", "solution", ")"}], " ", "*", " ", "deltaSolution"}], 
+          " ", "=", " ", 
+          RowBox[{
+           RowBox[{"-", "error"}], 
+           RowBox[{"(", "solution", ")"}], "  ", "for", " ", 
+           "deltaSolution"}]}], " ", "*)"}], "\[IndentingNewLine]", 
+        RowBox[{"deltaSolution", " ", "=", " ", 
+         RowBox[{"LinearSolve", "[", 
+          RowBox[{"jac", ",", 
+           RowBox[{"-", "error"}]}], "]"}]}], ";", "\n", 
+        "\[IndentingNewLine]", 
+        RowBox[{"(*", " ", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"updating", " ", "solution", " ", "and", " ", "error"}], 
+           ";", " ", 
+           RowBox[{
+           "as", " ", "nonpositive", " ", "values", " ", "for", " ", 
+            "solution", " ", "can", " ", "cause", " ", "problems", " ", 
+            "with", " ", "Jacobi", " ", "matrix"}]}], ",", " ", 
+          RowBox[{"they", " ", "are", " ", "set", " ", "to", " ", 
+           RowBox[{"minSolutionValue", "."}]}]}], " ", "*)"}], 
+        "\[IndentingNewLine]", 
+        RowBox[{"solution", " ", "=", " ", 
+         RowBox[{"MapThread", "[", 
+          RowBox[{"Max", ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"solution", "+", "deltaSolution"}], ",", 
+             RowBox[{"Table", "[", 
+              RowBox[{"minSolutionValue", ",", 
+               RowBox[{"{", 
+                RowBox[{"nTotal", "*", "meshPoints"}], "}"}]}], "]"}]}], 
+            "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"error", " ", "=", " ", 
+         RowBox[{"If", "[", 
+          RowBox[{"existStaticEq", ",", "\[IndentingNewLine]", 
+           RowBox[{"Flatten", "[", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"solution", "[", 
+                RowBox[{"[", 
+                 RowBox[{"Range", "[", "nInitial", "]"}], "]"}], "]"}], "-", 
+               RowBox[{"initialValues", "[", 
+                RowBox[{"[", 
+                 RowBox[{"Range", "[", "nInitial", "]"}], "]"}], "]"}]}], ",",
+               
+              RowBox[{"Apply", "[", 
+               RowBox[{"fSTAT", ",", 
+                RowBox[{"solution", "[", 
+                 RowBox[{"[", 
+                  RowBox[{"Range", "[", "nTotal", "]"}], "]"}], "]"}]}], 
+               "]"}], ",", 
+              RowBox[{"Table", "[", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{
+                   RowBox[{"Table", "[", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"solution", "[", 
+                    RowBox[{"[", 
+                    RowBox[{
+                    RowBox[{"nTotal", "*", "i"}], "+", "j"}], "]"}], "]"}], 
+                    "-", 
+                    RowBox[{"solution", "[", 
+                    RowBox[{"[", 
+                    RowBox[{
+                    RowBox[{"nTotal", "*", "i"}], "-", "nTotal", "+", "j"}], 
+                    "]"}], "]"}]}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"j", ",", "1", ",", 
+                    RowBox[{"nTotal", "-", "nStatic"}]}], "}"}]}], "]"}], "-",
+                    
+                   RowBox[{"deltaTau", "*", 
+                    RowBox[{"Apply", "[", 
+                    RowBox[{"fODE", ",", 
+                    RowBox[{"Table", "[", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"solution", "[", 
+                    RowBox[{"[", 
+                    RowBox[{
+                    RowBox[{"nTotal", "*", "i"}], "+", "j"}], "]"}], "]"}], 
+                    "+", 
+                    RowBox[{"solution", "[", 
+                    RowBox[{"[", 
+                    RowBox[{
+                    RowBox[{"nTotal", "*", "i"}], "-", "nTotal", "+", "j"}], 
+                    "]"}], "]"}]}], ")"}], "/", "2"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"j", ",", "1", ",", "nTotal"}], "}"}]}], "]"}]}], 
+                    "]"}], " ", "*", "  ", 
+                    RowBox[{"timeFuncDerivat", "[", 
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{"i", "-", "1"}], ")"}], "*", "deltaTau"}], " ", 
+                    "+", " ", 
+                    RowBox[{"i", "*", "deltaTau"}]}], ")"}], "/", "2"}], 
+                    "]"}]}]}], ",", 
+                  RowBox[{"Apply", "[", 
+                   RowBox[{"fSTAT", ",", 
+                    RowBox[{"Table", "[", 
+                    RowBox[{
+                    RowBox[{"solution", "[", 
+                    RowBox[{"[", 
+                    RowBox[{
+                    RowBox[{"nTotal", "*", "i"}], "+", "j"}], "]"}], "]"}], 
+                    ",", 
+                    RowBox[{"{", 
+                    RowBox[{"j", ",", "1", ",", "nTotal"}], "}"}]}], "]"}]}], 
+                   "]"}]}], "}"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"i", ",", "1", ",", 
+                  RowBox[{"meshPoints", "-", "1"}]}], "}"}]}], "]"}], ",", 
+              "errorFinal"}], "}"}], "]"}], ",", "\[IndentingNewLine]", 
+           RowBox[{"(*", " ", "else", " ", "*)"}], "\[IndentingNewLine]", 
+           RowBox[{"Flatten", "[", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"solution", "[", 
+                RowBox[{"[", 
+                 RowBox[{"Range", "[", "nInitial", "]"}], "]"}], "]"}], "-", 
+               RowBox[{"initialValues", "[", 
+                RowBox[{"[", 
+                 RowBox[{"Range", "[", "nInitial", "]"}], "]"}], "]"}]}], ",",
+               
+              RowBox[{"Table", "[", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{"Table", "[", 
+                   RowBox[{
+                    RowBox[{
+                    RowBox[{"solution", "[", 
+                    RowBox[{"[", 
+                    RowBox[{
+                    RowBox[{"nTotal", "*", "i"}], "+", "j"}], "]"}], "]"}], 
+                    "-", 
+                    RowBox[{"solution", "[", 
+                    RowBox[{"[", 
+                    RowBox[{
+                    RowBox[{"nTotal", "*", "i"}], "-", "nTotal", "+", "j"}], 
+                    "]"}], "]"}]}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"j", ",", "1", ",", 
+                    RowBox[{"nTotal", "-", "nStatic"}]}], "}"}]}], "]"}], "-",
+                   
+                  RowBox[{"deltaTau", "*", 
+                   RowBox[{"Apply", "[", 
+                    RowBox[{"fODE", ",", 
+                    RowBox[{"Table", "[", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"solution", "[", 
+                    RowBox[{"[", 
+                    RowBox[{
+                    RowBox[{"nTotal", "*", "i"}], "+", "j"}], "]"}], "]"}], 
+                    "+", 
+                    RowBox[{"solution", "[", 
+                    RowBox[{"[", 
+                    RowBox[{
+                    RowBox[{"nTotal", "*", "i"}], "-", "nTotal", "+", "j"}], 
+                    "]"}], "]"}]}], ")"}], "/", "2"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"j", ",", "1", ",", "nTotal"}], "}"}]}], "]"}]}], 
+                    "]"}], " ", "*", "  ", 
+                   RowBox[{"timeFuncDerivat", "[", 
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{"i", "-", "1"}], ")"}], "*", "deltaTau"}], " ", 
+                    "+", " ", 
+                    RowBox[{"i", "*", "deltaTau"}]}], ")"}], "/", "2"}], 
+                    "]"}]}]}], "}"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"i", ",", "1", ",", 
+                  RowBox[{"meshPoints", "-", "1"}]}], "}"}]}], "]"}], ",", 
+              "errorFinal"}], "}"}], "]"}]}], "\[IndentingNewLine]", "]"}]}], 
+        ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+        RowBox[{"(*", " ", 
+         RowBox[{
+          RowBox[{
+          "computing", " ", "the", " ", "estimated", " ", "relative", " ", 
+           "error"}], ",", " ", 
+          RowBox[{
+           RowBox[{"i", ".", "e", ".", " ", "error"}], "/", "solution"}], ",",
+           " ", 
+          RowBox[{
+          "to", " ", "control", " ", "the", " ", "while", " ", "loop"}]}], 
+         " ", "*)"}], "\[IndentingNewLine]", 
+        RowBox[{"meanRelError", " ", "=", " ", 
+         RowBox[{"Mean", "[", 
+          RowBox[{"Abs", "[", 
+           RowBox[{"error", " ", "/", " ", "solution"}], "]"}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"meanRelErrorList", " ", "=", " ", 
+         RowBox[{"Flatten", "[", 
+          RowBox[{"{", 
+           RowBox[{"meanRelErrorList", ",", " ", "meanRelError"}], "}"}], 
+          "]"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"maxRelError", " ", "=", " ", 
+         RowBox[{"Max", "[", 
+          RowBox[{"Abs", "[", 
+           RowBox[{"error", " ", "/", " ", "solution"}], "]"}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"maxRelErrorList", " ", "=", " ", 
+         RowBox[{"Flatten", "[", 
+          RowBox[{"{", 
+           RowBox[{"maxRelErrorList", ",", " ", "maxRelError"}], "}"}], 
+          "]"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"relError", " ", "=", " ", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{"errorCondFunc", " ", "\[Equal]", " ", "\"\<mean\>\""}], 
+           ",", " ", "meanRelError", ",", " ", "maxRelError"}], "]"}]}], ";", 
+        "\[IndentingNewLine]", "\[IndentingNewLine]", 
+        RowBox[{"iterCount", "++"}], ";"}]}], "\[IndentingNewLine]", "]"}], 
+     ";", " ", 
+     RowBox[{"(*", " ", 
+      RowBox[{"end", " ", "of", " ", "while", " ", "loop"}], " ", "*)"}], 
+     "\n", "\[IndentingNewLine]", 
+     RowBox[{"(*", " ", 
+      RowBox[{
+       RowBox[{
+       "Construction", " ", "of", " ", "the", " ", "solution", " ", 
+        "matrix"}], ",", " ", 
+       RowBox[{"columns", " ", "ordered", " ", "by", 
+        RowBox[{"(", 
+         RowBox[{"time", ",", 
+          RowBox[{
+           RowBox[{"<<", "variableNames"}], ">>"}]}], ")"}]}]}], " ", "*)"}], 
+     "\[IndentingNewLine]", 
+     RowBox[{"solution", " ", "=", " ", 
+      RowBox[{"Transpose", "[", 
+       RowBox[{"Prepend", "[", 
+        RowBox[{
+         RowBox[{"Transpose", "[", 
+          RowBox[{"Partition", "[", 
+           RowBox[{"solution", ",", "nTotal"}], "]"}], "]"}], ",", 
+         "timeList"}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"solutionReduced", " ", "=", " ", 
+      RowBox[{"Select", "[", 
+       RowBox[{"solution", ",", " ", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"#", "[", 
+           RowBox[{"[", "1", "]"}], "]"}], "<", "timeMax"}], "&"}]}], "]"}]}],
+      ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"(*", " ", 
+      RowBox[{
+      "Construction", " ", "of", " ", "the", " ", "iteration", " ", "log", 
+       " ", 
+       RowBox[{"matrix", ":", " ", 
+        RowBox[{"<", 
+         RowBox[{"iteration", " ", "number"}], ">", " ", "<", 
+         RowBox[{"mean", " ", 
+          RowBox[{"rel", ".", " ", "error"}]}], ">", " ", "<", 
+         RowBox[{"max", ".", " ", "rel", ".", " ", "error"}], ">"}]}]}], " ", 
+      "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"iterationLogList", " ", "=", " ", 
+      RowBox[{"Transpose", "[", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"Range", "[", 
+          RowBox[{"iterCount", "-", "1"}], "]"}], ",", "meanRelErrorList", 
+         ",", "maxRelErrorList"}], "}"}], "]"}]}], ";"}], 
+    "\[IndentingNewLine]", "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{
+  3.39239387375*^9, {3.39239751584375*^9, 3.39239751715625*^9}}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Output", "Section"],
+
+Cell[CellGroupData[{
+
+Cell["Bookkeeping information", "Subsection"],
+
+Cell[BoxData[{
+ RowBox[{"Print", "[", 
+  RowBox[{
+  "\"\<Computation time, without input processing and output generation: \
+\>\"", ",", " ", 
+   RowBox[{"tComputation", "[", 
+    RowBox[{"[", "1", "]"}], "]"}]}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Print", "[", 
+   RowBox[{
+   "\"\<Criterium for definitve solution: \>\"", ",", "\n", "\t", 
+    "errorCondFunc", ",", " ", "\"\< relative error < \>\"", ",", " ", 
+    "solutionPrecision", ",", " ", "\"\< = solutionPrecision\>\""}], "]"}], 
+  ";"}], "\n", 
+ RowBox[{
+  RowBox[{"Print", "[", 
+   RowBox[{"\"\<Number of iterations needed: \>\"", ",", 
+    RowBox[{"iterCount", "-", "1"}]}], "]"}], ";"}], "\n", 
+ RowBox[{"Print", "[", 
+  "\"\<iteration log (iteration number, mean relative error, maximal relative \
+error):\>\"", "]"}], "\n", 
+ RowBox[{"Print", "[", 
+  RowBox[{"iterationLogList", " ", "//", " ", "TableForm"}], "]"}]}], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["The solution in table form", "Subsection"],
+
+Cell[BoxData[{
+ RowBox[{"Print", "[", 
+  RowBox[{
+  "\"\<Solution \>\"", ",", " ", "variableNames", ",", " ", "\"\<:\>\""}], 
+  "]"}], "\n", 
+ RowBox[{"Print", "[", 
+  RowBox[{"solution", "//", "TableForm"}], "]"}]}], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["The graphs", "Subsection"],
+
+Cell[BoxData[
+ RowBox[{"For", "[", 
+  RowBox[{
+   RowBox[{"i", "=", "1"}], ",", 
+   RowBox[{"i", "<", 
+    RowBox[{
+     RowBox[{"Length", "[", "plotIndex", "]"}], "+", "1"}]}], ",", 
+   RowBox[{"i", "++"}], ",", 
+   RowBox[{"Print", "[", 
+    RowBox[{"ListPlot", "[", 
+     RowBox[{
+      RowBox[{"solutionReduced", "[", 
+       RowBox[{"[", 
+        RowBox[{"All", ",", 
+         RowBox[{"plotIndex", "[", 
+          RowBox[{"[", "i", "]"}], "]"}]}], "]"}], "]"}], ",", 
+      RowBox[{"PlotRange", "\[Rule]", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"plotIndex", "[", 
+           RowBox[{"[", 
+            RowBox[{"i", ",", "1"}], "]"}], "]"}], "\[Equal]", "1"}], ",", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"0", ",", "timeMax"}], "}"}], ",", "All"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"All", ",", "All"}], "}"}]}], "]"}]}], ",", 
+      RowBox[{"Frame", "\[Rule]", "True"}], ",", " ", 
+      RowBox[{"FrameLabel", "\[Rule]", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"variableNames", "[", 
+          RowBox[{"[", 
+           RowBox[{"plotIndex", "[", 
+            RowBox[{"[", 
+             RowBox[{"i", ",", "1"}], "]"}], "]"}], "]"}], "]"}], ",", " ", 
+         RowBox[{"variableNames", "[", 
+          RowBox[{"[", 
+           RowBox[{"plotIndex", "[", 
+            RowBox[{"[", 
+             RowBox[{"i", ",", "2"}], "]"}], "]"}], "]"}], "]"}]}], "}"}]}]}],
+      "]"}], "]"}]}], "\n", "]"}]], "Input",
+ CellChangeTimes->{{3.39239389825*^9, 3.392393919*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Cleaning up", "Subsection"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Clear", "[", "\"\<Global`*\>\"", "]"}], ";"}]], "Input"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+CellGrouping->Manual,
+WindowSize->{1016, 920},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+FrontEndVersion->"6.0 for Microsoft Windows (32-bit) (June 19, 2007)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[590, 23, 119, 1, 49, "Subtitle"],
+Cell[CellGroupData[{
+Cell[734, 28, 91, 1, 71, "Section"],
+Cell[828, 31, 1100, 33, 137, "Text"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1965, 69, 24, 0, 71, "Section"],
+Cell[CellGroupData[{
+Cell[2014, 73, 36, 0, 36, "Subsection"],
+Cell[2053, 75, 5923, 148, 872, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[8013, 228, 40, 0, 28, "Subsection"],
+Cell[8056, 230, 4696, 116, 452, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[12789, 351, 35, 0, 28, "Subsection"],
+Cell[12827, 353, 921, 29, 70, "Input"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[13797, 388, 30, 0, 41, "Section"],
+Cell[CellGroupData[{
+Cell[13852, 392, 49, 0, 36, "Subsection"],
+Cell[13904, 394, 4751, 123, 690, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[18692, 522, 75, 0, 28, "Subsection"],
+Cell[18770, 524, 424, 12, 50, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[19231, 541, 106, 2, 28, "Subsection"],
+Cell[19340, 545, 1290, 35, 110, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[20667, 585, 283, 10, 28, "Subsection"],
+Cell[20953, 597, 10787, 286, 650, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[31777, 888, 1179, 53, 79, "Subsection"],
+Cell[32959, 943, 35134, 814, 2532, "Input"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[68142, 1763, 25, 0, 71, "Section"],
+Cell[CellGroupData[{
+Cell[68192, 1767, 45, 0, 36, "Subsection"],
+Cell[68240, 1769, 911, 22, 132, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[69188, 1796, 48, 0, 36, "Subsection"],
+Cell[69239, 1798, 226, 6, 52, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[69502, 1809, 32, 0, 36, "Subsection"],
+Cell[69537, 1811, 1587, 44, 92, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[71161, 1860, 33, 0, 36, "Subsection"],
+Cell[71197, 1862, 91, 2, 31, "Input"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

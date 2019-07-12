@@ -1,0 +1,5 @@
+/* Öffnet ein Bild im PopUp */
+function openPic(url,winName,winParams) { 
+	var theWindow = window.open(url,winName,winParams);
+    if (theWindow) {theWindow.focus();}
+}

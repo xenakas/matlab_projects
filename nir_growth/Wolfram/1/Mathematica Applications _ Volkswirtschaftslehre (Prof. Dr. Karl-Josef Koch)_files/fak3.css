@@ -1,0 +1,194 @@
+#col3{
+background-image:url(https://www.wiwi.uni-siegen.de/style/config/images/random-image);
+}
+
+#breadcrump{
+display:none;
+}
+
+/* Fak Farben START */
+
+/* Boxen in Fak-Fabre START */
+#col2 .infoboxheader{
+background-color:#d9ead4 !important;
+color:#000 !important;
+}
+#col2 .infoboxheader a{
+color:#000 !important;
+}
+#col2 .gcsinfobox .infoboxheader{
+background-color:#e9e9f4 !important;
+background-color:#ddd !important;
+color:#030385 !important;
+}
+#col2 .infoboxcontent a{
+color:#000 !important;
+}
+#col2 .gcsinfobox a{
+color:#030385 !important;
+}
+/* Boxen in Fak-Fabre ENDE */
+
+
+#contentnavi{
+background-color:#409527;
+}
+#contentnavi ul li{
+background-color:#409527;
+}
+#contentnavi a:hover{
+color:#409527;
+}
+#contentnavi ul li a.active{
+color:#409527 !important;
+}
+
+#foot, #zielgruppe{
+background-color:#409527 !important;
+}
+table.zielgruppe,table.zielgruppe,table.zielgruppe tbody tr:hover td{
+background-color:#409527 !important;
+}
+
+table.zielgruppe tbody tr td:hover {
+background-color:#e1e1f1 !important;
+}
+
+table.zielgruppe tbody tr td:hover a{
+color:#409527 !important;
+text-decoration:none;
+}
+
+
+#balken_orange{
+background-color:#bbb !important;
+}
+h1.title{
+border-bottom:1px solid #409527;
+}
+
+
+/* Hintergruende fuers Menue START */
+#sidemenu ul li a.active,#sidemenu ul li a:hover{
+background-color:#409527 !important;
+}
+#sidemenu ul li ul li a{
+background-color:#d9ead4 !important;
+}
+#sidemenu ul li ul li a.active, #sidemenu ul li ul li ul li a{
+background-color:#f0f7ee !important;
+}
+#sidemenu ul li ul li ul li a.active, #sidemenu ul li ul li ul li ul li a{
+background-color:#fff !important;
+}
+#sidemenu ul li ul li ul li ul li a.active{
+background-color:#fff !important;
+}
+#sidemenu ul li ul li a:hover,#sidemenu ul li ul li a.active:hover{
+background-color:#fff !important;
+}
+#sidemenu ul li ul li ul li ul li a:hover,#sidemenu ul li ul li ul li ul li a.active:hover{
+background-color:#f5f5f5 !important;
+}
+/* Hintergruende fuers Menue ENDE */
+
+
+
+#col3_editablecontent a:hover{
+border-color:#409527 !important;
+}
+#col3_editablecontent a:focus{
+background-color:#409527;
+color:#fff;
+}
+/* Fak Farben ENDE */
+
+/* Portal-Sytles */
+#newsportal
+{
+margin:0;
+font-size:0.9em;
+}
+
+#newsportal ul{
+margin:0.5em 0 0 0;
+padding:0 1em 0 1em;
+list-style: none;
+list-style-image:none; 
+list-style-type:none;
+}
+
+#newsportal div div a{
+font-size:2em;
+margin-bottom:2em !important;
+display:block;
+}
+
+#newsportal li
+{
+list-style-image:none; 
+list-style-type:none;
+margin: 0px;
+text-align: left;
+background-color:#efefef !important;
+border:0 !important;
+margin-bottom:2em !important;
+}
+
+#newsportal .bretttitel a{
+color:#999;
+border:0;
+}
+#newsportal .bretttitel a:hover{
+color:#000;
+border:0;
+}
+
+#newsportal .datum {
+position:relative;
+top:0px;
+float:right;
+font-weight:normal;
+color: #999;
+z-index:90;
+right:0.5em;
+font-size:1em !important;
+}
+
+#newsportal .bretttitel{
+position:relative;
+top:0;
+left:0.5em;
+float:left;
+font-weight:bold;
+color:#fff;
+}
+
+#newsportal .inhalt{
+padding-left:0.5em;
+clear:both;
+background-color:#fff;
+}
+
+#newsportal .inhalt p{
+font-size:1.2em;
+}
+
+#newsportal h1 a{
+text-decotation:none;
+border:0;
+}
+#newsportal h1{
+margin-bottom:0.5em;
+font-size:1.7em;
+}
+
+#newsportal  p{
+padding:0;
+margin:0;
+}
+/* Portal Styles ENDE */
+
+#sidemenu ul li a.image{
+background-color:transparent !important;
+}

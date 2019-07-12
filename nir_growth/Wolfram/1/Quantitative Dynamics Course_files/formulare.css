@@ -1,0 +1,267 @@
+/**
+ *	Universität Leipzig
+ *	Formularlayout
+ *	Stand 29.01.2009  
+ */ 
+
+label, input, textarea, option, form, fieldset{
+	margin: 0px;
+	padding: 0px;	
+}	
+
+div#content fieldset{
+	border: 1px solid #bbb;	
+	border-top: 1px solid #ccc;
+	border-left: 1px solid #ccc;
+}
+
+div#content form fieldset p {
+	padding-left:0;
+}
+
+div#content .greybox {
+	border: 1px solid #fff;
+	background-color: #efefef;
+	padding: 10px 10px;
+	background: #fcfcfc url(../images/fieldset_bg.png) repeat-x left top;		
+}
+
+div#content legend {
+	display: none;
+}
+
+/* IE6 */
+* html div#content legend {
+	margin-left: -7px;
+}
+
+/* IE7 */
+*:first-child+html div#content legend {
+	margin-left: -7px;
+}
+
+div#content label {
+	float: left;
+	width: 150px;
+	display: block;
+}
+
+div#content label.radio{
+	
+}
+
+div#content label.wide {
+	width: 250px;
+}
+	
+div#content input, 
+div#content textarea, 
+div#content select {
+	border: 1px solid #bbb;	
+	border-top: 1px solid #ccc;
+	border-left: 1px solid #ccc;
+	background-color: #fff;
+	margin-bottom: 10px;
+	width: 200px;
+	padding: 2px;
+}
+
+div#content select {
+	width: 206px;
+}
+
+div#content input.radio,
+div#content input.radio-left, 
+div#content input.checkbox,
+div#content input.tx-sremailsubscribe-pi1-checkbox {
+	width: 16px;
+	border: none;
+	background-color: transparent;
+}
+
+div#content span.radio {
+	font-size:0.8em;
+}
+
+div#content input.radio{
+/*	float:left; */
+	width: 20px;
+	margin-bottom: 0px;
+}
+
+div#content input.radio-left {
+	margin-right:10px;
+	width:auto;
+	float:left;
+	margin-top:3px;
+}
+
+div#content input.small{
+	width:100px;
+}
+
+div#content input.submit{
+	width: auto;
+	padding: 2px 5px;
+	float: right;
+	color: #3366CC;
+	background: #fcfcfc url(../images/fieldset_bg.png) repeat-x left top;	
+}
+
+div#content button.submit{
+	width: auto;
+	padding: 2px 5px;
+	float: right;
+	color: #3366CC;
+	background: #fcfcfc url(../images/fieldset_bg.png) repeat-x left top;
+	border: 1px solid #bbb;	
+	border-top: 1px solid #ccc;
+	border-left: 1px solid #ccc;
+}
+
+div#content option {
+	background-color: #fff;
+}
+
+div#content optgroup{
+	background-color: #ddd;
+	color: #000;
+	margin: 0px;
+}
+
+#content form {
+	width:100%;
+	height:auto;
+	float:left;
+	clear:both;
+	padding-bottom:1em;	
+}
+
+#content form h2 {
+	clear:both;
+}
+
+div#content fieldset h4 {
+	margin: 0 0 10px 0 !important;
+	padding: 0 !important;
+	font-size: .8em !important;
+}
+
+/* tabs */
+
+.ui-tabs-hide { display: none; }
+
+#example fieldset {
+	float: left;
+}
+
+#example ul {
+	margin:  0;
+	padding: 0;
+}
+
+#example ul li {
+	float: left;
+	list-style: none;
+	list-style-image: none;
+	margin: 0 2px 0 0;	
+}
+
+#example ul li a {
+	border: 1px solid #fff;
+	border-bottom: none;
+	display: block;
+	padding: 0px 10px 0px 10px;
+}
+
+#example ul li a:hover {
+	text-decoration: none;
+}
+
+.ui-tabs-selected {
+	position: relative;
+	top: 2px;	
+	padding-bottom: 2px;
+	background-color: #f0f0f0;	
+	border: 1px solid #bbb;	
+	border-top: 1px solid #ccc;
+	border-left: 1px solid #ccc;
+	border-bottom: 1px solid #f0f0f0;
+}  
+
+
+
+/* zusätzliche Klassen für Formulare
+   Stand: 14.01.2009, Frank Hirsch    */
+   
+   
+.error {
+	border:1px solid red !important;
+}
+
+			
+.error-msg-wrap {
+	border: 1px solid #bbb;				
+	border-top: 1px solid #ccc;
+	border-left: 1px solid #ccc;
+	margin:1em 0;
+	clear:both;
+}
+			
+.error-msg {
+	border: 1px solid #fff;
+	background-color: red;
+	padding: 10px 10px;
+	color:#fff;
+}
+
+div#content label.checkbox-label {
+	width:450px;
+	margin-bottom:10px;
+}
+
+
+div#content ul.checkbox-label-list {
+	width:437px;
+	margin-left:37px;
+}
+
+*:first-child+html ul.checkbox-label-list {
+	padding-left:32px;
+}
+
+div#content ul.checkbox-explain {
+	width:450px;
+	margin-bottom:10px;	
+}
+
+div#content div.radio-group {
+	float:left;
+	width:auto;
+	height:auto;
+}
+
+div#content div.radio-group label {
+	width:auto;
+	margin:0em 1em 0 0;
+}
+
+div#content input.tx-sremailsubscribe-pi1-radio {
+	border:0;
+	width:auto;
+	margin:0.2em 1em 0 0;
+	float:left;
+}
+
+*html div#content input.tx-sremailsubscribe-pi1-radio {
+	margin:0em 1em 0 0;
+}
+*:first-child+html input.tx-sremailsubscribe-pi1-radio {
+	margin:0em 1em 0 0;
+}
+
+div#content p.tx-sremailsubscribe-pi1-error {
+	color:red;
+}
+
+

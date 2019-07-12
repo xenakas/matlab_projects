@@ -1,0 +1,56 @@
+/* 
+    check screen resolution, 
+    hide DOM-Elements when innerWidth smaller than a given value 
+*/
+function checkRes() {
+    
+    /* minimun width of browser window */
+    var checkWidth1024 = 1105;
+///    var checkWidth800 = 980;
+//	var checkWidth800 = 300;
+	
+    /* insert the element id's here */
+    var elementsToHide1024 = new Array("banner-hoch");
+//	var elementsToHide800 = new Array("banner-quer");
+    
+    var thisWidth = (navigator.appName != "Microsoft Internet Explorer") ? window.innerWidth : document.body.offsetWidth;
+	
+	display1024 = "block";
+		display800 = "block";
+	
+/*    if(thisWidth < checkWidth1024) {
+        display1024 = "none";
+    } else if(thisWidth < checkWidth800) {
+        display800 = "none";
+    }
+*/
+
+    if(thisWidth < checkWidth1024) {
+        display1024 = "none";
+    }
+//	if(thisWidth < checkWidth800) {
+//        display800 = "none";
+//    }
+
+
+	for(var i = 0; i < elementsToHide1024.length; i++) {
+		if(document.getElementById(elementsToHide1024[i])) {
+			document.getElementById(elementsToHide1024[i]).style.display = display1024;
+		}
+	}
+	
+/*	for(var i = 0; i < elementsToHide800.length; i++) {
+		if(document.getElementById(elementsToHide800[i])) {
+			document.getElementById(elementsToHide800[i]).style.display = display800;
+		}
+	}
+*/	
+    return;
+}
+
+/* init non-IE-Browsers */
+if (window.innerWidth) {
+    window.onresize = checkRes;
+}
+
+

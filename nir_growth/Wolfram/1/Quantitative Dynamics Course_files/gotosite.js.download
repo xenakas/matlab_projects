@@ -1,0 +1,18 @@
+/* nimmt die Url entgegen und leitet den Browser weiter */
+function goToSite(url) {
+
+	if(url.indexOf('http://')== -1 &&  url.indexOf('https://')== -1) {
+		
+		t = location.protocol + '//' + location.hostname + '/';	
+				
+		t = t + url;
+		
+	} else {
+		
+		t = url;
+		
+	}
+
+	location.href = t;
+
+}

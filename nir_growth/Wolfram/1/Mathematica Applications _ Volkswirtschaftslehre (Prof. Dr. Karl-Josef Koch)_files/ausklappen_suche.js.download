@@ -1,0 +1,81 @@
+$(document).ready(
+	function() {
+
+	$(".content_to_show_hide_cd").hide();
+	$(".show_hide_next_cd").addClass("klippklapp_link_cd");
+
+	$(".show_hide_next_cd").click(function() {
+		if ($(this).is('.extend')) {	
+			$(this).toggleClass("extend");
+			$(this).next(".content_to_show_hide_cd").addClass('hide');
+			$(this).next(".content_to_show_hide_cd").fadeOut("fast");
+		}else{
+			$(this).toggleClass("extend");
+			$(this).next().addClass('show');
+			$(this).next(".content_to_show_hide_cd").removeClass('hide');
+			$(this).next(".content_to_show_hide_cd").fadeIn("fast");
+		}
+
+	});
+
+
+	$("#col2_content .hide_suche").hide();
+
+	$("#col2_content .erweiterte_suche").prepend('<img class="dropdown" style="padding-right:0.5em; vertical-align:middle;" src="/stylesheets/redesign_09/uni_images/icons/pfeil-rechts-blau.jpg"/>');
+
+
+	$("#col2_content .erweiterte_suche").click(function() {
+		if ($(this).is('.extend')) {	
+			$(this).toggleClass("extend");
+			$(this).children(".dropdown").remove();
+			$(this).prepend('<img class="dropdown" style="padding-right:0.5em; vertical-align:middle;" src="/stylesheets/redesign_09/uni_images/icons/pfeil-rechts-blau.jpg"/>');
+			$(".hide_suche").slideUp("fast");
+		}else{
+			$(this).toggleClass("extend");
+			$(this).children(".dropdown").remove();
+			$(this).prepend('<img class="dropdown" style="padding-right:0.5em; vertical-align:middle;" src="/stylesheets/redesign_09/uni_images/icons/pfeil-unten-blau.jpg"/>');
+			$(".hide_suche").slideDown();
+		}
+
+	});
+
+
+	$("#col1_content #sidemenu ul li a.dropdown ").removeAttr("href");
+	$("#col2_content a.e_suche ").removeAttr("href");
+	$('#col1_content #sidemenu ul li a.dropdown').css({cursor:"pointer"});
+
+	$('#col1_content #sidemenu ul li a.dropdown:not(.active)').click(function() {
+		if ($(this).is('.extend')) {	
+			$(this).toggleClass("extend");
+			$(this).parent().children(".ausklapp_subsidemenu").slideUp("fast");
+			$(this).parent().toggleClass('show');
+			$(this).toggleClass('active');
+			$(this).children(".dropdown").remove();
+			/* $(this).prepend('<img class="dropdown" style="padding-right:0.5em; vertical-align:middle;" src="/stylesheets/redesign_09/uni_images/icons/pfeil-rechts-blau.jpg"/>'); */
+		}else{
+
+			$(this).toggleClass("extend");
+			$(this).parent().toggleClass('show');
+			$(this).toggleClass('active');
+
+
+if((navigator.appName == "Microsoft Internet Explorer") && (navigator.appVersion < "7")){
+			$(".show").children(".ausklapp_subsidemenu").css({display:"block"});
+   }else{
+			$(".show").children(".ausklapp_subsidemenu").slideDown('fast');
+   }
+
+
+
+			$(this).removeClass("dropdown");
+			$(".show").children(".ausklapp_subsidemenu").toggleClass('ieblock');
+
+			/* $(this).parent().children(".ausklapp_subsidemenu").toggleClass('ausklapp_subsidemenu'); */
+
+			/* $(this).prepend('<img class="dropdown" style="padding-right:0.5em; vertical-align:middle;" src="/stylesheets/redesign_09/uni_images/icons/pfeil-unten-blau.jpg"/>'); */
+		}
+
+	});
+
+
+});

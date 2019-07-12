@@ -1,0 +1,71 @@
+﻿/* CSS fuer die Navigation - WIFA Fakultätsebene */
+
+ul#column-nav li.active {
+	background: transparent url(../images/list_wifa.gif) no-repeat left 4px;
+}
+
+ul#column-nav ul li a:hover {
+	background: transparent url(../images/list_wifa.gif) no-repeat left 4px;
+}
+
+ul#column-nav li a.active {
+	background: transparent url(../images/list_wifa.gif) no-repeat left 4px;
+}
+
+ul#column-nav ul li ul li a:hover {
+	background: transparent url(../images/list_wifa.gif) no-repeat left 4px;
+}
+
+ul#column-nav li ul li ul li a.active {
+	background: transparent url(../images/list_wifa.gif) no-repeat left 4px;
+}
+
+
+
+#content h1{
+	color: #3399cc;
+}
+
+
+#content h2{
+	background: #3399cc url(../images/bg_headerbalken_wifa.jpg) repeat 0 0;
+}
+
+.teaser h2 {
+	background: #3399cc url(../images/bg_teaserbalken_wifa.jpg) repeat-x 0 0;
+}
+
+
+.teaser h3 {
+	background: #3399cc url(../images/bg_teaserbalken_wifa.jpg) repeat-x 0 0;
+}
+
+div.promotion div.teaser_icon {
+	background-image: url(../images/teasergrafik/bg_teaser-header_graublau.jpg);
+}
+
+
+/* Section-Nav im Inhaltsbereich */
+
+div.content-navigation {
+	background-color: #c1deec
+}
+
+ul.section-nav li.active span.current {
+	background: transparent url(../images/list_wifa.gif) no-repeat left 5px;
+}
+	
+ul.section-nav li a.actifsub {
+	background:transparent url(../images/list_wifa.gif) no-repeat left 5px; 
+}    
+    
+ul.section-nav li a:hover {
+	background:transparent url(../images/list_wifa.gif) no-repeat left 5px; 
+}
+
+
+/* Tabellen */
+table th {
+	background-color: #7fccdc;
+}
+

@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html id="ie8" lang="en-US">
+<![endif]-->
+<!--[if !(IE 8) ]><!-->
+<html lang="en-US">
+<!--<![endif]-->
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width" />
+
+
+
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://vermandel.fr/xmlrpc.php" />
+
+<!--[if lt IE 9]>
+<script src="http://vermandel.fr/wp-content/themes/discovery/js/html5.js" type="text/javascript"></script>
+<![endif]-->
+
+<title>DSGE Dynare Model Matlab Codes &#8211; Gauthier Vermandel</title>
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="Gauthier Vermandel &raquo; Feed" href="http://vermandel.fr/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Gauthier Vermandel &raquo; Comments Feed" href="http://vermandel.fr/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Gauthier Vermandel &raquo; DSGE Dynare Model Matlab Codes Comments Feed" href="http://vermandel.fr/dsge-dynare-model-matlab-codes/feed/" />
+<!-- This site uses the Google Analytics by MonsterInsights plugin v6.2.6 - Using Analytics tracking - https://www.monsterinsights.com/ -->
+<script type="text/javascript" src="http://gc.kis.v2.scr.kaspersky-labs.com/9C2704E6-AC2A-6941-B150-6FBB1D28DEBC/main.js" charset="UTF-8"></script><link rel="stylesheet" crossorigin="anonymous" href="http://gc.kis.v2.scr.kaspersky-labs.com/CBED82D1BBF6-051B-1496-A2CA-6E4072C9/abn/main.css"/><script type="text/javascript" data-cfasync="false">
+		var disableStr = 'ga-disable-UA-27925780-1';
+
+	/* Function to detect opted out users */
+	function __gaTrackerIsOptedOut() {
+		return document.cookie.indexOf(disableStr + '=true') > -1;
+	}
+
+	/* Disable tracking if the opt-out cookie exists. */
+	if ( __gaTrackerIsOptedOut() ) {
+		window[disableStr] = true;
+	}
+
+	/* Opt-out function */
+	function __gaTrackerOptout() {
+	  document.cookie = disableStr + '=true; expires=Thu, 31 Dec 2099 23:59:59 UTC; path=/';
+	  window[disableStr] = true;
+	}
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','__gaTracker');
+
+	__gaTracker('create', 'UA-27925780-1', 'auto');
+	__gaTracker('set', 'forceSSL', true);
+	__gaTracker('send','pageview');
+</script>
+<!-- / Google Analytics by MonsterInsights -->
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/vermandel.fr\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7.10"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='simple_tooltips_style-css'  href='http://vermandel.fr/wp-content/plugins/simple-tooltips/zebra_tooltips.css?ver=4.7.10' type='text/css' media='all' />
+<link rel='stylesheet' id='dcjq-mega-menu-css'  href='http://vermandel.fr/wp-content/plugins/jquery-mega-menu/css/dcjq-mega-menu.css?ver=4.7.10' type='text/css' media='all' />
+<link rel='stylesheet' id='s8_jtweets_stylesheets-css'  href='http://vermandel.fr/wp-content/plugins/wp-jtweets/style.css?ver=4.7.10' type='text/css' media='all' />
+<link rel='stylesheet' id='wp-syntax-css-css'  href='http://vermandel.fr/wp-content/plugins/wp-syntax/css/wp-syntax.css?ver=1.1' type='text/css' media='all' />
+<link rel='stylesheet' id='style-css'  href='http://vermandel.fr/wp-content/themes/discovery/style.css?ver=2.1.1' type='text/css' media='all' />
+<link rel='stylesheet' id='font-awesome-css'  href='http://vermandel.fr/wp-content/themes/discovery/css/font-awesome.min.css?ver=2.1.1' type='text/css' media='all' />
+<link rel='stylesheet' id='animate-css'  href='http://vermandel.fr/wp-content/themes/discovery/css/animate.min.css?ver=2.1.1' type='text/css' media='all' />
+<link rel='stylesheet' id='flexslider-css'  href='http://vermandel.fr/wp-content/themes/discovery/js/flexslider.css?ver=2.1.1' type='text/css' media='all' />
+<link rel='stylesheet' id='jetpack_css-css'  href='http://vermandel.fr/wp-content/plugins/jetpack/css/jetpack.css?ver=5.7.1' type='text/css' media='all' />
+<script type='text/javascript' src='http://vermandel.fr/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://vermandel.fr/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' src='http://vermandel.fr/wp-content/plugins/jquery-mega-menu/js/jquery.dcmegamenu.1.3.4.min.js?ver=4.7.10'></script>
+<script type='text/javascript' src='http://vermandel.fr/wp-content/plugins/wp-jtweets/js/jtweets.js?ver=4.7.10'></script>
+<script type='text/javascript' src='http://vermandel.fr/wp-content/themes/discovery/js/keyboard-image-navigation.js?ver=2.1.1'></script>
+<script type='text/javascript' src='http://vermandel.fr/wp-content/themes/discovery/js/Inview.js?ver=4.7.10'></script>
+<script type='text/javascript' src='http://vermandel.fr/wp-content/themes/discovery/js/animate.js?ver=4.7.10'></script>
+<script type='text/javascript' src='http://vermandel.fr/wp-content/themes/discovery/js/jquery.flexslider-min.js?ver=4.7.10'></script>
+<script type='text/javascript' src='http://vermandel.fr/wp-content/themes/discovery/js/flexslider-init.js?ver=4.7.10'></script>
+<link rel='https://api.w.org/' href='http://vermandel.fr/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://vermandel.fr/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://vermandel.fr/wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 4.7.10" />
+<link rel="canonical" href="http://vermandel.fr/dsge-dynare-model-matlab-codes/" />
+<link rel='shortlink' href='https://wp.me/P7CWXq-5D' />
+<link rel="alternate" type="application/json+oembed" href="http://vermandel.fr/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fvermandel.fr%2Fdsge-dynare-model-matlab-codes%2F" />
+<link rel="alternate" type="text/xml+oembed" href="http://vermandel.fr/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fvermandel.fr%2Fdsge-dynare-model-matlab-codes%2F&#038;format=xml" />
+<style type="text/css">
+.qtranxs_flag_en {background-image: url(http://vermandel.fr/wp-content/plugins/qtranslate/flags/gb.png); background-repeat: no-repeat;}
+.qtranxs_flag_fr {background-image: url(http://vermandel.fr/wp-content/plugins/qtranslate/flags/fr.png); background-repeat: no-repeat;}
+</style>
+<link hreflang="en" href="http://vermandel.fr/en/dsge-dynare-model-matlab-codes/" rel="alternate" />
+<link hreflang="fr" href="http://vermandel.fr/fr/dsge-dynare-model-matlab-codes/" rel="alternate" />
+<link hreflang="x-default" href="http://vermandel.fr/dsge-dynare-model-matlab-codes/" rel="alternate" />
+<meta name="generator" content="qTranslate-X 3.4.6.8" />
+
+<link rel='dns-prefetch' href='//v0.wordpress.com'/>
+<link rel='dns-prefetch' href='//i0.wp.com'/>
+<link rel='dns-prefetch' href='//i1.wp.com'/>
+<link rel='dns-prefetch' href='//i2.wp.com'/>
+<style type='text/css'>img#wpstats{display:none}</style>		
+	<link rel="stylesheet" class="test" href="http://vermandel.fr/wp-content/themes/discovery/css/turquoise.css" type="text/css" media="screen">
+
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="DSGE Dynare Model Matlab Codes" />
+<meta property="og:url" content="http://vermandel.fr/dsge-dynare-model-matlab-codes/" />
+<meta property="og:description" content="Here are some very simple working examples of very standard DSGE Models. In the following codes, I employ two methods to solve rational expectations models. The resolution is performed via the dyna…" />
+<meta property="article:published_time" content="2013-08-03T09:34:15+00:00" />
+<meta property="article:modified_time" content="2018-04-18T06:55:52+00:00" />
+<meta property="og:site_name" content="Gauthier Vermandel" />
+<meta property="og:image" content="https://s0.wp.com/i/blank.jpg" />
+<meta property="og:locale" content="en_US" />
+<meta name="twitter:text:title" content="DSGE Dynare Model Matlab Codes" />
+<meta name="twitter:card" content="summary" />
+			<style type="text/css" id="wp-custom-css">
+				/*
+Welcome to Custom CSS!
+
+To learn how this works, see http://wp.me/PEmnE-Bt
+*/
+/* for my shared codes page*/
+.mysmallbox {
+	font-size: 80%;
+}
+
+.su-spoiler {
+	margin-bottom: 0;
+}
+
+table.dl_files {
+	padding: 0;
+	border-right-color: #ffffff;
+}
+
+.su-list ul li a span i {
+  position:static;
+}
+
+table.dl_files tbody {
+	color: #ffffff;
+}
+
+table.dl_files tbody td {
+	padding: 0;
+	border-color: #ffffff;
+}
+
+/*
+	CSS Migrated from Jetpack:
+*/
+
+/*
+Welcome to Custom CSS!
+
+To learn how this works, see http://wp.me/PEmnE-Bt
+*/
+/* for my shared codes page*/
+.mysmallbox {
+	font-size: 80%;
+}
+
+.su-spoiler {
+	margin-bottom: 0;
+}
+
+table.dl_files {
+	padding: 0;
+	border-right-color: #ffffff;
+}
+
+table.dl_files tbody {
+	color: #ffffff;
+}
+
+table.dl_files tbody td {
+	padding: 0;
+	border-color: #ffffff;
+}			</style>
+		</head>
+
+<body class="page-template-default page page-id-349">
+	<div id="wrap">
+		<div id="page" class="hfeed site">
+
+			
+		    <div id="masthead-wrap">
+
+			    <div id="topbar_container">
+				    <div class="topbar">
+					    <div class='topbar_content_left'><div class="contact email"><i class="fa fa-envelope"></i> gauthier@vermandel.fr</div></div>				    	<div class="topbar_content_right">	<ul class="social-media">
+					<li><a class="nav-social-btn twitter-icon" title="Twitter" href="https://twitter.com/gVermandel" target="_blank"><i class="fa fa-twitter"></i></a></li>
+		
+		
+		
+		
+	</ul><!-- #social-icons-->
+</div>
+				    </div>
+			    </div>
+
+				<header id="masthead" class="site-header header_container" role="banner">
+
+					
+						<div class="site-introduction">
+							<h1 class="site-title"><a href="http://vermandel.fr/" title="Gauthier Vermandel" rel="home">Gauthier Vermandel</a></h1>
+							<p class="site-description">Assistant Professor</p> 
+						</div>
+
+					
+					<nav role="navigation" class="site-navigation main-navigation">
+
+						<h1 class="assistive-text"><a href="#" title="Navigation Toggle">Menu</a></h1>
+
+						<div class="assistive-text skip-link">
+							<a href="#content" title="Skip to content">Skip to content</a>
+						</div>
+
+						<div class="menu-categorie-du-blog-container"><ul id="menu-categorie-du-blog" class="menu"><li id="menu-item-346" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-346"><a href="http://vermandel.fr">Home</a></li>
+<li id="menu-item-347" class="menu-item menu-item-type-taxonomy menu-item-object-category current-menu-ancestor current-menu-parent menu-item-has-children menu-item-347"><a href="http://vermandel.fr/category/r-codes/">Codes</a>
+<ul class="sub-menu">
+	<li id="menu-item-365" class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-349 current_page_item menu-item-365"><a href="http://vermandel.fr/dsge-dynare-model-matlab-codes/">DSGE Dynare Codes</a></li>
+	<li id="menu-item-289" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-289"><a href="http://vermandel.fr/category/r-codes/">R Codes</a></li>
+</ul>
+</li>
+<li id="menu-item-370" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-370"><a href="http://vermandel.fr/enseignements/">Teaching</a></li>
+<li id="menu-item-372" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-372"><a href="http://vermandel.fr/travaux-de-recherche/">Research</a></li>
+<li id="menu-item-411" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-411"><a href="http://vermandel.fr/the-author/">The author</a></li>
+<li id="menu-item-1008" class="qtranxs-lang-menu qtranxs-lang-menu-en menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-1008"><a title="English" href="#">Language:&nbsp;<img src="http://vermandel.fr/wp-content/plugins/qtranslate/flags/gb.png" alt="English" /></a>
+<ul class="sub-menu">
+	<li id="menu-item-1009" class="qtranxs-lang-menu-item qtranxs-lang-menu-item-en menu-item menu-item-type-custom menu-item-object-custom menu-item-1009"><a title="English" href="http://vermandel.fr/en/dsge-dynare-model-matlab-codes/"><img src="http://vermandel.fr/wp-content/plugins/qtranslate/flags/gb.png" alt="English" />&nbsp;English</a></li>
+	<li id="menu-item-1010" class="qtranxs-lang-menu-item qtranxs-lang-menu-item-fr menu-item menu-item-type-custom menu-item-object-custom menu-item-1010"><a title="Français" href="http://vermandel.fr/fr/dsge-dynare-model-matlab-codes/"><img src="http://vermandel.fr/wp-content/plugins/qtranslate/flags/fr.png" alt="Français" />&nbsp;Français</a></li>
+</ul>
+</li>
+</ul></div>						
+						<form role="search" method="get" class="search-form" action="http://vermandel.fr/">
+
+							<label>
+								<span class="screen-reader-text">Search for:</span>
+								<input type="search" class="search-field" placeholder="Search..." value="" name="s" title="Search for:" />
+							</label>
+
+							<input type="submit" class="search-submit" value="Search" />
+
+						</form>
+
+					</nav><!-- .site-navigation .main-navigation -->
+
+				</header><!-- #masthead .site-header -->
+
+			</div><!-- #masthead-wrap -->
+
+		    <div class="header-image">
+							</div>
+			
+			<div id="main" class="site-main">		<header class="entry-header">
+		<h1 class="page-title">DSGE Dynare Model Matlab Codes</h1><span class="breadcrumbs"><div class="breadcrumbs" xmlns:v="http://rdf.data-vocabulary.org/#"><a href="http://vermandel.fr/" rel="v:url" property="v:title">Home</a> / <span class="current">DSGE Dynare Model Matlab Codes</span></div><!-- .breadcrumbs --></span>
+		</header><!-- .entry-header -->
+		<div id="primary_wrap">
+		<div id="primary" class="content-area">
+			<div id="content" class="site-content" role="main">
+
+				
+					
+<article id="post-349" class="post-349 page type-page status-publish hentry">
+
+	<div class="entry-content">
+		<p>Here are some very simple working examples of very standard DSGE Models. In the following codes, I employ two methods to solve rational expectations models. The resolution is performed via the <a href="http://www.dynare.org/" target="_blank">dynare package</a> (requires Matlab or octave) initially developed by <a href="http://www.mjui.fr/juillard/">Michel Juillard</a>. The second way is through matlab codes written by Paul Klein, <a href="http://www.tepper.cmu.edu/faculty-research/faculty-directory/bennett-mccallum/matlab-files-for-re-calculations/index.aspx" target="_blank">Bennett McCallum</a> and Edward Nelson. All theses codes are based on the generalized Schur form to solve a systems of linear expectational difference equations.</br></p>
+<div class="su-heading su-heading-style-default su-heading-align-center" style="font-size:17px;margin-bottom:20px"><div class="su-heading-inner">Real Business Cycle Models (RBC)</div></div>
+In this section, I share very standard business cycle models very close to the canonical neo-classical growth model. I extend the set-up with several real rigidities taken from Christiano <em>et al.</em> (2005) and Smets and Wouters (2003, 2007) which aim at enhancing the empirical relevance of macro-models.</p>
+<div class="su-spoiler su-spoiler-style-fancy su-spoiler-icon-folder-1 su-spoiler-closed"><div class="su-spoiler-title"><span class="su-spoiler-icon"></span>The basic RBC Model</div><div class="su-spoiler-content su-clearfix" style="display:none">
+<a href="http://vermandel.fr/wp-content/uploads/2014/02/BasicRBC.zip" class="su-button su-button-style-default" style="color:#fff;background-color:#2D89EF;border-color:#246ebf;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px" target="__blank"><span style="color:#fff;padding:5px 12px;font-size:10px;line-height:15px;border-color:#6cacf4;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;text-shadow:none;-moz-text-shadow:none;-webkit-text-shadow:none"><i class="fa fa-file-o" style="font-size:10px;color:#fff"></i> Dynare Codes</span></a> <a href="http://vermandel.fr/wp-content/uploads/2014/03/BasicRBC_matlab.rar" class="su-button su-button-style-default" style="color:#fff;background-color:#2D89EF;border-color:#246ebf;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px" target="__blank"><span style="color:#fff;padding:5px 12px;font-size:10px;line-height:15px;border-color:#6cacf4;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;text-shadow:none;-moz-text-shadow:none;-webkit-text-shadow:none"><i class="fa fa-file-o" style="font-size:10px;color:#fff"></i>  Matlab Codes </span></a>
+<br />
+Our economy is populated by a large number of households <img src="//s0.wp.com/latex.php?latex=j%5Cin%5B0%3B1%5D+&#038;bg=ffffff&#038;fg=000&#038;s=-2" alt="j&#92;in&#091;0;1&#093; " title="j&#92;in&#091;0;1&#093; " class="latex" />, the utility function of the representative household <img src="//s0.wp.com/latex.php?latex=j+&#038;bg=ffffff&#038;fg=000&#038;s=-2" alt="j " title="j " class="latex" /> is defined by:<br />
+<img src="//s0.wp.com/latex.php?latex=%5Cmathcal%7BU%7D%28C_t%28j%29%2CH_t%28j%29%29%3D%5Cfrac%7BC_%7Bt%7D%28j%29%5E%7B1-%5Csigma%5EC%7D%7D%7B1-%5Csigma%5EC%7D-%5Cfrac%7BH_%7Bt%7D%28j%29%5E%7B1%2B1%2F%5Csigma%5EL%7D%7D%7B1%2B1%2F%5Csigma%5EL%7D&#038;bg=ffffff&#038;fg=000&#038;s=0" alt="&#92;mathcal{U}(C_t(j),H_t(j))=&#92;frac{C_{t}(j)^{1-&#92;sigma^C}}{1-&#92;sigma^C}-&#92;frac{H_{t}(j)^{1+1/&#92;sigma^L}}{1+1/&#92;sigma^L}" title="&#92;mathcal{U}(C_t(j),H_t(j))=&#92;frac{C_{t}(j)^{1-&#92;sigma^C}}{1-&#92;sigma^C}-&#92;frac{H_{t}(j)^{1+1/&#92;sigma^L}}{1+1/&#92;sigma^L}" class="latex" /><br />
+where <img src="//s0.wp.com/latex.php?latex=%5Csigma%5EC+&#038;bg=ffffff&#038;fg=000&#038;s=-2" alt="&#92;sigma^C " title="&#92;sigma^C " class="latex" /> is the risk aversion and <img src="//s0.wp.com/latex.php?latex=%5Csigma%5EL++&#038;bg=ffffff&#038;fg=000&#038;s=-2" alt="&#92;sigma^L  " title="&#92;sigma^L  " class="latex" /> is the frischian elasticity of labor. <img src="//s0.wp.com/latex.php?latex=%5Cmathcal%7BU%7D%28.%29+&#038;bg=ffffff&#038;fg=000&#038;s=-2" alt="&#92;mathcal{U}(.) " title="&#92;mathcal{U}(.) " class="latex" /> is increasing in consumption <img src="//s0.wp.com/latex.php?latex=C_t%28j%29+&#038;bg=ffffff&#038;fg=000&#038;s=-2" alt="C_t(j) " title="C_t(j) " class="latex" /> and decreasing with hours worked <img src="//s0.wp.com/latex.php?latex=H_t%28j%29+&#038;bg=ffffff&#038;fg=000&#038;s=-2" alt="H_t(j) " title="H_t(j) " class="latex" />.<br />
+<br />The welfare index is determined by the sum of the current and expected utilities:<br />
+<img src="//s0.wp.com/latex.php?latex=%5Cmathcal%7BW%7D_t%28j%29%3D%5Csum%5E%7B%2B%5Cinfty%7D_%7B%5Ctau%3D0%7D%5Cbeta%5E%5Ctau+%C2%A0%5Cmathcal%7BU%7D%28C_%7Bt%2B%5Ctau%7D%28j%29%2CH_%7Bt%2B%5Ctau%7D%28j%29%29&#038;bg=ffffff&#038;fg=000&#038;s=0" alt="&#92;mathcal{W}_t(j)=&#92;sum^{+&#92;infty}_{&#92;tau=0}&#92;beta^&#92;tau  &#92;mathcal{U}(C_{t+&#92;tau}(j),H_{t+&#92;tau}(j))" title="&#92;mathcal{W}_t(j)=&#92;sum^{+&#92;infty}_{&#92;tau=0}&#92;beta^&#92;tau  &#92;mathcal{U}(C_{t+&#92;tau}(j),H_{t+&#92;tau}(j))" class="latex" /><br />
+<br />
+Additionally, the production function follows a Cobb-Douglas technology:<br />
+<img src="//s0.wp.com/latex.php?latex=Y_t%28j%29%3D+e%5E%7B%5Cvarepsilon%5EA_t%7D+H_t%28j%29%5E%7B1-%5Calpha%7D&#038;bg=ffffff&#038;fg=000&#038;s=0" alt="Y_t(j)= e^{&#92;varepsilon^A_t} H_t(j)^{1-&#92;alpha}" title="Y_t(j)= e^{&#92;varepsilon^A_t} H_t(j)^{1-&#92;alpha}" class="latex" /><br />
+where <img src="//s0.wp.com/latex.php?latex=%5Cvarepsilon%5EA_t%5Csim%5Cmathcal%7BN%7D%5Cleft%280%2C%5Csigma_%7BA%2Ct%7D%5E2%5Cright%29+&#038;bg=ffffff&#038;fg=000&#038;s=-2" alt="&#92;varepsilon^A_t&#92;sim&#92;mathcal{N}&#92;left(0,&#92;sigma_{A,t}^2&#92;right) " title="&#92;varepsilon^A_t&#92;sim&#92;mathcal{N}&#92;left(0,&#92;sigma_{A,t}^2&#92;right) " class="latex" /> is an IID exogenous disturbance associated with a productivity shock.<br />
+The resources constraint is given by the demand from households and authorities:<br />
+<img src="//s0.wp.com/latex.php?latex=Y_t%3DC_t+%2B+g%5Ey%5Cbar%7BY%7De%5E%7B%5Cvarepsilon%5EG_t%7D%2C&#038;bg=ffffff&#038;fg=000&#038;s=0" alt="Y_t=C_t + g^y&#92;bar{Y}e^{&#92;varepsilon^G_t}," title="Y_t=C_t + g^y&#92;bar{Y}e^{&#92;varepsilon^G_t}," class="latex" /><br />
+where <img src="//s0.wp.com/latex.php?latex=%5Cvarepsilon%5EG_t+&#038;bg=ffffff&#038;fg=000&#038;s=-2" alt="&#92;varepsilon^G_t " title="&#92;varepsilon^G_t " class="latex" /> is a IDD normal shock, <img src="//s0.wp.com/latex.php?latex=%5Cbar%7BY%7D+&#038;bg=ffffff&#038;fg=000&#038;s=-2" alt="&#92;bar{Y} " title="&#92;bar{Y} " class="latex" /> is the steady state level of the GDP and <img src="//s0.wp.com/latex.php?latex=g%5Ey+&#038;bg=ffffff&#038;fg=000&#038;s=-2" alt="g^y " title="g^y " class="latex" /> is the spending to GDP ratio.<br />
+</div></div>
+<div class="su-spoiler su-spoiler-style-fancy su-spoiler-icon-folder-1 su-spoiler-closed"><div class="su-spoiler-title"><span class="su-spoiler-icon"></span>The basic RBC Model with Physical Capital</div><div class="su-spoiler-content su-clearfix" style="display:none">
+<a href="http://vermandel.fr/wp-content/uploads/2014/03/BasicRBC_capital.zip" class="su-button su-button-style-default" style="color:#fff;background-color:#2D89EF;border-color:#246ebf;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px" target="__blank"><span style="color:#fff;padding:5px 12px;font-size:10px;line-height:15px;border-color:#6cacf4;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;text-shadow:none;-moz-text-shadow:none;-webkit-text-shadow:none"><i class="fa fa-file-o" style="font-size:10px;color:#fff"></i> Dynare Codes</span></a> <a href="http://vermandel.fr/wp-content/uploads/2014/03/BasicRBC_capital_matlab.zip" class="su-button su-button-style-default" style="color:#fff;background-color:#2D89EF;border-color:#246ebf;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px" target="__blank"><span style="color:#fff;padding:5px 12px;font-size:10px;line-height:15px;border-color:#6cacf4;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;text-shadow:none;-moz-text-shadow:none;-webkit-text-shadow:none"><i class="fa fa-file-o" style="font-size:10px;color:#fff"></i>  Matlab Codes </span></a>
+<br />
+Capital law of motion reads as in Solow&#8217;s model and  is determined by:<br />
+<img src="//s0.wp.com/latex.php?latex=I_t%28j%29+%3D+K_%7Bt%2B1%7D%28j%29+-+%281-%5Cdelta%29K_t%28j%29.&#038;bg=ffffff&#038;fg=000&#038;s=0" alt="I_t(j) = K_{t+1}(j) - (1-&#92;delta)K_t(j)." title="I_t(j) = K_{t+1}(j) - (1-&#92;delta)K_t(j)." class="latex" /></p>
+<p>The Cobb-Douglas production function now combines labor, physical capital and technology to produce goods:<br />
+<img src="//s0.wp.com/latex.php?latex=Y_t%28j%29%3D+e%5E%7B%5Cvarepsilon%5EA_t%7D+K_t%28j%29%5E%5Calpha+H_t%28j%29%5E%7B1-%5Calpha%7D%2C&#038;bg=ffffff&#038;fg=000&#038;s=0" alt="Y_t(j)= e^{&#92;varepsilon^A_t} K_t(j)^&#92;alpha H_t(j)^{1-&#92;alpha}," title="Y_t(j)= e^{&#92;varepsilon^A_t} K_t(j)^&#92;alpha H_t(j)^{1-&#92;alpha}," class="latex" /><br />
+where <img src="//s0.wp.com/latex.php?latex=%5Cvarepsilon%5EA_t%5Csim%5Cmathcal%7BN%7D%5Cleft%280%2C%5Csigma_%7BA%2Ct%7D%5E2%5Cright%29&#038;bg=ffffff&#038;fg=000&#038;s=0" alt="&#92;varepsilon^A_t&#92;sim&#92;mathcal{N}&#92;left(0,&#92;sigma_{A,t}^2&#92;right)" title="&#92;varepsilon^A_t&#92;sim&#92;mathcal{N}&#92;left(0,&#92;sigma_{A,t}^2&#92;right)" class="latex" /> is an IID exogenous disturbance associated with a productivity shock.<br />
+The resources constraint now includes investment:<br />
+<img src="//s0.wp.com/latex.php?latex=Y_t%3DC_t+%2B+I_t+%2B+g%5Ey%5Cbar%7BY%7De%5E%7B%5Cvarepsilon%5EG_t%7D%2C&#038;bg=ffffff&#038;fg=000&#038;s=0" alt="Y_t=C_t + I_t + g^y&#92;bar{Y}e^{&#92;varepsilon^G_t}," title="Y_t=C_t + I_t + g^y&#92;bar{Y}e^{&#92;varepsilon^G_t}," class="latex" /><br />
+where <img src="//s0.wp.com/latex.php?latex=%5Cvarepsilon%5EG_t&#038;bg=ffffff&#038;fg=000&#038;s=0" alt="&#92;varepsilon^G_t" title="&#92;varepsilon^G_t" class="latex" /> is a IDD normal shock, <img src="//s0.wp.com/latex.php?latex=%5Cbar%7BY%7D&#038;bg=ffffff&#038;fg=000&#038;s=0" alt="&#92;bar{Y}" title="&#92;bar{Y}" class="latex" /> is the steady state level of the GDP and <img src="//s0.wp.com/latex.php?latex=g%5Ey&#038;bg=ffffff&#038;fg=000&#038;s=0" alt="g^y" title="g^y" class="latex" /> is the share of public spending to the GDP.<br />
+</div></div>
+<div class="su-spoiler su-spoiler-style-fancy su-spoiler-icon-folder-1 su-spoiler-closed"><div class="su-spoiler-title"><span class="su-spoiler-icon"></span>RBC Model with external habits</div><div class="su-spoiler-content su-clearfix" style="display:none">
+<a href="http://vermandel.fr/wp-content/uploads/2014/03/BasicRBC_habits.zip" class="su-button su-button-style-default" style="color:#fff;background-color:#2D89EF;border-color:#246ebf;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px" target="__blank"><span style="color:#fff;padding:5px 12px;font-size:10px;line-height:15px;border-color:#6cacf4;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;text-shadow:none;-moz-text-shadow:none;-webkit-text-shadow:none"><i class="fa fa-file-o" style="font-size:10px;color:#fff"></i> Dynare Codes</span></a> <a href="http://vermandel.fr/wp-content/uploads/2014/03/BasicRBC_habits_matlab.zip" class="su-button su-button-style-default" style="color:#fff;background-color:#2D89EF;border-color:#246ebf;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px" target="__blank"><span style="color:#fff;padding:5px 12px;font-size:10px;line-height:15px;border-color:#6cacf4;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;text-shadow:none;-moz-text-shadow:none;-webkit-text-shadow:none"><i class="fa fa-file-o" style="font-size:10px;color:#fff"></i>  Matlab Codes </span></a>
+<br />
+In this setting, we consider that each household has external consumption habits. This feature captures the autocorrelation of consumption observed in the data. Thus the utility function subject to external habits reads as follows:<br />
+<img src="//s0.wp.com/latex.php?latex=%5Cmathcal%7BU%7D%28C_t%28j%29%2CH_t%28j%29%29%3D%5Cfrac%7B+%5Cleft%28C_t%28j%29-C_%7Bt-1%7D%5Cright%29%5E%7B1-%5Csigma%5EC%7D%7D%7B1-%5Csigma%5EC%7D-%5Cfrac%7BH%28j%29%5E%7B1%2B1%2F%5Csigma%5EL%7D%7D%7B1%2B1%2F%5Csigma%5EL%7D.&#038;bg=ffffff&#038;fg=000&#038;s=0" alt="&#92;mathcal{U}(C_t(j),H_t(j))=&#92;frac{ &#92;left(C_t(j)-C_{t-1}&#92;right)^{1-&#92;sigma^C}}{1-&#92;sigma^C}-&#92;frac{H(j)^{1+1/&#92;sigma^L}}{1+1/&#92;sigma^L}." title="&#92;mathcal{U}(C_t(j),H_t(j))=&#92;frac{ &#92;left(C_t(j)-C_{t-1}&#92;right)^{1-&#92;sigma^C}}{1-&#92;sigma^C}-&#92;frac{H(j)^{1+1/&#92;sigma^L}}{1+1/&#92;sigma^L}." class="latex" /><br />
+</div></div>
+<div class="su-spoiler su-spoiler-style-fancy su-spoiler-icon-folder-1 su-spoiler-closed"><div class="su-spoiler-title"><span class="su-spoiler-icon"></span>RBC Model with investment adjustment costs</div><div class="su-spoiler-content su-clearfix" style="display:none">
+<a href="http://vermandel.fr/wp-content/uploads/2014/03/BasicRBC_acI.zip" class="su-button su-button-style-default" style="color:#fff;background-color:#2D89EF;border-color:#246ebf;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px" target="__blank"><span style="color:#fff;padding:5px 12px;font-size:10px;line-height:15px;border-color:#6cacf4;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;text-shadow:none;-moz-text-shadow:none;-webkit-text-shadow:none"><i class="fa fa-file-o" style="font-size:10px;color:#fff"></i> Dynare Codes</span></a> <a href="http://vermandel.fr/wp-content/uploads/2014/03/BasicRBC_acI_matlab.zip" class="su-button su-button-style-default" style="color:#fff;background-color:#2D89EF;border-color:#246ebf;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px" target="__blank"><span style="color:#fff;padding:5px 12px;font-size:10px;line-height:15px;border-color:#6cacf4;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;text-shadow:none;-moz-text-shadow:none;-webkit-text-shadow:none"><i class="fa fa-file-o" style="font-size:10px;color:#fff"></i>  Matlab Codes </span></a>
+<br />
+To introduce asset price fluctuations, households supplying investment goods face an investment adjustement costs  given by:<br />
+<img src="//s0.wp.com/latex.php?latex=AC%5EI%28I_t%28j%29%2CI_%7Bt-1%7D%28j%29%29%3D%5Cleft%28+%5Cfrac%7BI_t%28j%29%7D%7BI_%7Bt-1%7D%28j%29%7D+%C2%A0-1+%5Cright%29%5E2.&#038;bg=ffffff&#038;fg=000&#038;s=0" alt="AC^I(I_t(j),I_{t-1}(j))=&#92;left( &#92;frac{I_t(j)}{I_{t-1}(j)}  -1 &#92;right)^2." title="AC^I(I_t(j),I_{t-1}(j))=&#92;left( &#92;frac{I_t(j)}{I_{t-1}(j)}  -1 &#92;right)^2." class="latex" /><br />
+The law of motion of capital with investment adjustment costs is defined by:<br />
+<img src="//s0.wp.com/latex.php?latex=%281-AC%5EI_t%29I_t%28j%29+%3D+K_%7Bt%2B1%7D%28j%29+-+%281-%5Cdelta%29K_t%28j%29.&#038;bg=ffffff&#038;fg=000&#038;s=0" alt="(1-AC^I_t)I_t(j) = K_{t+1}(j) - (1-&#92;delta)K_t(j)." title="(1-AC^I_t)I_t(j) = K_{t+1}(j) - (1-&#92;delta)K_t(j)." class="latex" /><br />
+These costs drive a wedge between the price of assets and goods and offer a tradeoff beetwen capital goods and riskless bonds.<br />
+</div></div>
+<div class="su-spoiler su-spoiler-style-fancy su-spoiler-icon-folder-1 su-spoiler-closed"><div class="su-spoiler-title"><span class="su-spoiler-icon"></span>RBC Model with variable capital utilization</div><div class="su-spoiler-content su-clearfix" style="display:none">
+<a href="http://vermandel.fr/wp-content/uploads/2014/02/BasicRBC_capital_utilization.zip" class="su-button su-button-style-default" style="color:#fff;background-color:#2D89EF;border-color:#246ebf;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px" target="__blank"><span style="color:#fff;padding:5px 12px;font-size:10px;line-height:15px;border-color:#6cacf4;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;text-shadow:none;-moz-text-shadow:none;-webkit-text-shadow:none"><i class="fa fa-file-o" style="font-size:10px;color:#fff"></i> Dynare Codes</span></a>
+<br />
+Standard RBC model suppose that capital is homogenous and its utilization is constant. CEE (2005) introduce variable capital utilization in order to match the data. The amount of capital utilized in the production is:<br />
+<img src="//s0.wp.com/latex.php?latex=K%5Eu_%7Bt%2B1%7D%28j%29+%3D+K_%7Bt%7D%28j%29+u_t%28j%29.&#038;bg=ffffff&#038;fg=000&#038;s=0" alt="K^u_{t+1}(j) = K_{t}(j) u_t(j)." title="K^u_{t+1}(j) = K_{t}(j) u_t(j)." class="latex" /><br />
+This equation shows that capital requires one period to be installed (i.e; &#8220;time to build&#8221;).<br />
+The Cobb-Douglas production function now combines technology, labor and utilized capital:<br />
+<img src="//s0.wp.com/latex.php?latex=Y_t%28j%29%3D+e%5E%7B%5Cvarepsilon%5EA_t%7D+K%5Eu_t%28j%29%5E%5Calpha+H_t%28j%29%5E%7B1-%5Calpha%7D.&#038;bg=ffffff&#038;fg=000&#038;s=0" alt="Y_t(j)= e^{&#92;varepsilon^A_t} K^u_t(j)^&#92;alpha H_t(j)^{1-&#92;alpha}." title="Y_t(j)= e^{&#92;varepsilon^A_t} K^u_t(j)^&#92;alpha H_t(j)^{1-&#92;alpha}." class="latex" /><br />
+The variable utilization of capital incurs a variable cost, denoted <img src="//s0.wp.com/latex.php?latex=a%28u_t%29&#038;bg=ffffff&#038;fg=000&#038;s=0" alt="a(u_t)" title="a(u_t)" class="latex" />. Its functional forms is defined by:<br />
+$altex a(u_t) = \bar{Z}(u_t-1) + \frac{\bar{Z}}{2}\frac{\psi}{1-\psi}(u_t-1)^2.$<br />
+Given this cost, the resources constraint also includes capital utilization costs:<br />
+<img src="//s0.wp.com/latex.php?latex=Y_t%3DC_t+%2B+I_t+%2B+g%5Ey%5Cbar%7BY%7De%5E%7B%5Cvarepsilon%5EG_t%7D+%2B+a%28u_t%29K_%7Bt%7D.&#038;bg=ffffff&#038;fg=000&#038;s=0" alt="Y_t=C_t + I_t + g^y&#92;bar{Y}e^{&#92;varepsilon^G_t} + a(u_t)K_{t}." title="Y_t=C_t + I_t + g^y&#92;bar{Y}e^{&#92;varepsilon^G_t} + a(u_t)K_{t}." class="latex" /><br />
+In equilibrium, the optimal capital utilization is defined by:<br />
+<img src="//s0.wp.com/latex.php?latex=Z_t+%3D+a%27%28u_t%29+%3D+%5Cbar%7BZ%7D+%2B+%5Cbar%7BZ%7D%5Cfrac%7B%5Cpsi%7D%7B1-%5Cpsi%7D%28u_t-1%29.&#038;bg=ffffff&#038;fg=000&#038;s=0" alt="Z_t = a&#039;(u_t) = &#92;bar{Z} + &#92;bar{Z}&#92;frac{&#92;psi}{1-&#92;psi}(u_t-1)." title="Z_t = a&#039;(u_t) = &#92;bar{Z} + &#92;bar{Z}&#92;frac{&#92;psi}{1-&#92;psi}(u_t-1)." class="latex" /><br />
+</div></div>
+<div class="su-heading su-heading-style-default su-heading-align-center" style="font-size:17px;margin-bottom:20px"><div class="su-heading-inner">New Keynesian Model codes (NK)</div></div>
+In this section, the previous basic RBC model is extended to account for nominal rigidities implied by price stickiness.</p>
+<div class="su-spoiler su-spoiler-style-fancy su-spoiler-icon-folder-1 su-spoiler-closed"><div class="su-spoiler-title"><span class="su-spoiler-icon"></span>The New Keynesian Model</div><div class="su-spoiler-content su-clearfix" style="display:none">
+<a href="http://vermandel.fr/wp-content/uploads/2014/02/NK.zip" class="su-button su-button-style-default" style="color:#fff;background-color:#2D89EF;border-color:#246ebf;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px" target="__blank"><span style="color:#fff;padding:5px 12px;font-size:10px;line-height:15px;border-color:#6cacf4;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;text-shadow:none;-moz-text-shadow:none;-webkit-text-shadow:none"><i class="fa fa-file-o" style="font-size:10px;color:#fff"></i> Dynare Codes</span></a> <a href="http://vermandel.fr/wp-content/uploads/2014/03/NK_matlab.zip" class="su-button su-button-style-default" style="color:#fff;background-color:#2D89EF;border-color:#246ebf;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px" target="__blank"><span style="color:#fff;padding:5px 12px;font-size:10px;line-height:15px;border-color:#6cacf4;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;text-shadow:none;-moz-text-shadow:none;-webkit-text-shadow:none"><i class="fa fa-file-o" style="font-size:10px;color:#fff"></i> Matlab Codes</span></a>
+<br />
+The standard New Keynesian model assumes that monopolistic competitive firms are price makers on the good market, but they cannot adjust prices as prices are sticky. There are two ways of introducing nominal rigidities: the Rotemberg way, see Rotemberg (1982) and the Calvo price setting, see Calvo (1983). I present here the Calvo price setting. There is a continuum of monopolitic firms <img src="//s0.wp.com/latex.php?latex=i%5Cin%5B0%3B1%5D&#038;bg=ffffff&#038;fg=000&#038;s=0" alt="i&#92;in&#091;0;1&#093;" title="i&#92;in&#091;0;1&#093;" class="latex" /> that chooses their price $P^* _t(i)$. Among these firms, a fraction <img src="//s0.wp.com/latex.php?latex=%5Ctheta%5Ep&#038;bg=ffffff&#038;fg=000&#038;s=0" alt="&#92;theta^p" title="&#92;theta^p" class="latex" /> is not allowed to set price, then the price remains the same such that <img src="//s0.wp.com/latex.php?latex=P%5E%2A_%7Bt%7D%28i%29%3DP_%7Bt-1%7D%28j%29&#038;bg=ffffff&#038;fg=000&#038;s=0" alt="P^*_{t}(i)=P_{t-1}(j)" title="P^*_{t}(i)=P_{t-1}(j)" class="latex" />. For the share <img src="//s0.wp.com/latex.php?latex=1-%5Ctheta%5Ep&#038;bg=ffffff&#038;fg=000&#038;s=0" alt="1-&#92;theta^p" title="1-&#92;theta^p" class="latex" /> of firms allowed to reset their price, each firm maximizes the expected sum of profits:<br />
+<img src="//s0.wp.com/latex.php?latex=%5Cmax_%7BP%5E%2A_%7Bt%7D%28j%29%7D%5Csum_%7B%5Ctau%3D0%7D%5E%7B%2B%5Cinfty%7D+%5Cleft%28%5Cbeta%5Ctheta%5Ep%5Cright%29%5E%5Ctau+%5Cleft%28+P%5E%2A_%7Bt%7D%28j%29+-+MC_%7Bt%2B%5Ctau%7D%28j%29+%5Cright%29+Y_%7Bt%2B%5Ctau%7D%28j%29%2C&#038;bg=ffffff&#038;fg=000&#038;s=0" alt="&#92;max_{P^*_{t}(j)}&#92;sum_{&#92;tau=0}^{+&#92;infty} &#92;left(&#92;beta&#92;theta^p&#92;right)^&#92;tau &#92;left( P^*_{t}(j) - MC_{t+&#92;tau}(j) &#92;right) Y_{t+&#92;tau}(j)," title="&#92;max_{P^*_{t}(j)}&#92;sum_{&#92;tau=0}^{+&#92;infty} &#92;left(&#92;beta&#92;theta^p&#92;right)^&#92;tau &#92;left( P^*_{t}(j) - MC_{t+&#92;tau}(j) &#92;right) Y_{t+&#92;tau}(j)," class="latex" /><br />
+under the demand constraint from final goods packers.<br />
+The FOC from the previous problem, combined with the aggregate price equation and taken in logs gives rise to the New Keynesian Phillips Curve (NKPC):<br />
+<img src="//s0.wp.com/latex.php?latex=%5Cwidehat%7B%5Cpi%7D_t+%3D+%5Cbeta+E_t%5Cwidehat%7B%5Cpi%7D_%7Bt%2B1%7D+%2B+%5Cfrac%7B%281-%5Ctheta%5Ep%29%281-%5Cbeta%5Ctheta%5Ep%29%7D%7B%5Ctheta%5Ep%7D%28%5Cwidehat%7Bmc%7D_t-%5Cwidehat%7Bp%7D_t%29.&#038;bg=ffffff&#038;fg=000&#038;s=0" alt="&#92;widehat{&#92;pi}_t = &#92;beta E_t&#92;widehat{&#92;pi}_{t+1} + &#92;frac{(1-&#92;theta^p)(1-&#92;beta&#92;theta^p)}{&#92;theta^p}(&#92;widehat{mc}_t-&#92;widehat{p}_t)." title="&#92;widehat{&#92;pi}_t = &#92;beta E_t&#92;widehat{&#92;pi}_{t+1} + &#92;frac{(1-&#92;theta^p)(1-&#92;beta&#92;theta^p)}{&#92;theta^p}(&#92;widehat{mc}_t-&#92;widehat{p}_t)." class="latex" /><br />
+Finally, to close the model, we suppose that monetary authority controls the nominal interest rates and is concerned by both price and GDP growths. The monetary policy rule à la Taylor in logs reads:<br />
+<img src="//s0.wp.com/latex.php?latex=%5Cwidehat%7Br%7D_t+%3D+%5Crho%5ER%5Cwidehat%7Br%7D_%7Bt-1%7D+%2B+%281-%5Crho%5ER%29%28+%5Cphi%5E%5Cpi%5Cwidehat%7B%5Cpi%7D_t+%2B+%5Cphi_Y%28+%5Cwidehat%7By%7D_t+-+%5Cwidehat%7By%7D_%7Bt-1%7D+%29&#038;bg=ffffff&#038;fg=000&#038;s=0" alt="&#92;widehat{r}_t = &#92;rho^R&#92;widehat{r}_{t-1} + (1-&#92;rho^R)( &#92;phi^&#92;pi&#92;widehat{&#92;pi}_t + &#92;phi_Y( &#92;widehat{y}_t - &#92;widehat{y}_{t-1} )" title="&#92;widehat{r}_t = &#92;rho^R&#92;widehat{r}_{t-1} + (1-&#92;rho^R)( &#92;phi^&#92;pi&#92;widehat{&#92;pi}_t + &#92;phi_Y( &#92;widehat{y}_t - &#92;widehat{y}_{t-1} )" class="latex" /><br />
+</div></div>
+<div class="su-spoiler su-spoiler-style-fancy su-spoiler-icon-folder-1 su-spoiler-closed"><div class="su-spoiler-title"><span class="su-spoiler-icon"></span>New Keynesian Model with price indexation</div><div class="su-spoiler-content su-clearfix" style="display:none">
+<a href="http://vermandel.fr/wp-content/uploads/2014/02/NK_backward.zip" class="su-button su-button-style-default" style="color:#fff;background-color:#2D89EF;border-color:#246ebf;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px" target="__blank"><span style="color:#fff;padding:5px 12px;font-size:10px;line-height:15px;border-color:#6cacf4;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;text-shadow:none;-moz-text-shadow:none;-webkit-text-shadow:none"><i class="fa fa-file-o" style="font-size:10px;color:#fff"></i> Dynare Codes</span></a> <a href="http://vermandel.fr/wp-content/uploads/2014/03/NK_backward_matlab.zip" class="su-button su-button-style-default" style="color:#fff;background-color:#2D89EF;border-color:#246ebf;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px" target="__blank"><span style="color:#fff;padding:5px 12px;font-size:10px;line-height:15px;border-color:#6cacf4;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;text-shadow:none;-moz-text-shadow:none;-webkit-text-shadow:none"><i class="fa fa-file-o" style="font-size:10px;color:#fff"></i> Matlab Codes</span></a>
+<br />
+Galì and Gertler (1999) observe backward looking dynamics in firms&#8217; price setting. They include in New Keynesian setup an indexation mechanism when firms are setting their price. In particular in our model, for the fraction <img src="//s0.wp.com/latex.php?latex=%5Ctheta%5Ep&#038;bg=ffffff&#038;fg=000&#038;s=0" alt="&#92;theta^p" title="&#92;theta^p" class="latex" /> of firms not allowed to reset price, their selling price remains the same such that <img src="//s0.wp.com/latex.php?latex=P%5E%2A_%7Bt%7D%28i%29%3DP_%7Bt-1%7D%28j%29%5Cpi_%7Bt-1%7D%5E%7B%5Cgamma%5Ep%7D&#038;bg=ffffff&#038;fg=000&#038;s=0" alt="P^*_{t}(i)=P_{t-1}(j)&#92;pi_{t-1}^{&#92;gamma^p}" title="P^*_{t}(i)=P_{t-1}(j)&#92;pi_{t-1}^{&#92;gamma^p}" class="latex" /> and indexed on past inflation in a proportion <img src="//s0.wp.com/latex.php?latex=%5Cgamma%5Ep&#038;bg=ffffff&#038;fg=000&#038;s=0" alt="&#92;gamma^p" title="&#92;gamma^p" class="latex" />. Concerning the share <img src="//s0.wp.com/latex.php?latex=1-%5Ctheta%5Ep&#038;bg=ffffff&#038;fg=000&#038;s=0" alt="1-&#92;theta^p" title="1-&#92;theta^p" class="latex" /> of firms allowed to reset their price, each firm maximizes the expected sum of profits:<br />
+<img src="//s0.wp.com/latex.php?latex=%5Cmax_%7BP%5E%2A_%7Bt%7D%28j%29%7D%5Csum_%7B%5Ctau%3D0%7D%5E%7B%2B%5Cinfty%7D+%5Cleft%28%5Cbeta%5Ctheta%5Ep%5Cright%29%5E%5Ctau+%5Cleft%28+P%5E%2A_%7Bt%7D%28j%29+%5Cleft%28+%5Cfrac%7BP_%7Bt-1%2B%5Ctau%7D%7D%7BP_%7Bt-1%7D%7D+%5Cright%29%5E%7B%5Cgamma%5Ep%7D+-+MC_%7Bt%2B%5Ctau%7D%28j%29+%5Cright%29+Y_%7Bt%2B%5Ctau%7D%28j%29%2C&#038;bg=ffffff&#038;fg=000&#038;s=0" alt="&#92;max_{P^*_{t}(j)}&#92;sum_{&#92;tau=0}^{+&#92;infty} &#92;left(&#92;beta&#92;theta^p&#92;right)^&#92;tau &#92;left( P^*_{t}(j) &#92;left( &#92;frac{P_{t-1+&#92;tau}}{P_{t-1}} &#92;right)^{&#92;gamma^p} - MC_{t+&#92;tau}(j) &#92;right) Y_{t+&#92;tau}(j)," title="&#92;max_{P^*_{t}(j)}&#92;sum_{&#92;tau=0}^{+&#92;infty} &#92;left(&#92;beta&#92;theta^p&#92;right)^&#92;tau &#92;left( P^*_{t}(j) &#92;left( &#92;frac{P_{t-1+&#92;tau}}{P_{t-1}} &#92;right)^{&#92;gamma^p} - MC_{t+&#92;tau}(j) &#92;right) Y_{t+&#92;tau}(j)," class="latex" /><br />
+under the demand constraint from final goods packers. <br />
+The FOC from the previous problem, combined with the aggregate price equation and taken in logs give rise to the New Keynesian Phillips Curve (NKPC):<br />
+$late<br />
+\widehat{\pi}_t = \gamma^p\widehat{\pi}_{t-1} + \beta E_t\widehat{\pi}_{t+1} + \frac{(1-\theta^p)(1-\beta\theta^p)}{\theta^p}(\widehat{mc}_t-\widehat{p}_t).<br />
+</div></div>
+<div class="su-heading su-heading-style-default su-heading-align-center" style="font-size:17px;margin-bottom:20px"><div class="su-heading-inner">Published codes</div></div>
+Here are my own codes for models published in peer-review journals.</p>
+<div class="su-spoiler su-spoiler-style-fancy su-spoiler-icon-folder-1 su-spoiler-closed"><div class="su-spoiler-title"><span class="su-spoiler-icon"></span>Global banking and the conduct of macroprudential policy in a monetary union</div><div class="su-spoiler-content su-clearfix" style="display:none">
+<a href="https://www.researchgate.net/publication/316510800_Global_Banking_and_the_Conduct_of_Macroprudential_Policy_in_a_Monetary_Union" class="su-button su-button-style-default" style="color:#fff;background-color:#2D89EF;border-color:#246ebf;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px" target="__blank"><span style="color:#fff;padding:5px 12px;font-size:10px;line-height:15px;border-color:#6cacf4;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;text-shadow:none;-moz-text-shadow:none;-webkit-text-shadow:none"><i class="fa fa-file-pdf-o" style="font-size:10px;color:#fff"></i> pdf</span></a> <a href="https://www.sciencedirect.com/science/article/pii/S016407041730160X" class="su-button su-button-style-default" style="color:#fff;background-color:#2D89EF;border-color:#246ebf;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px" target="__blank"><span style="color:#fff;padding:5px 12px;font-size:10px;line-height:15px;border-color:#6cacf4;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;text-shadow:none;-moz-text-shadow:none;-webkit-text-shadow:none"><i class="fa fa-file-pdf-o" style="font-size:10px;color:#fff"></i> Journal</span></a>
+<a href="https://www.dropbox.com/s/anqyqgappj23o3o/PV_2017_jMacro.zip?dl=1" class="su-button su-button-style-default" style="color:#fff;background-color:#2D89EF;border-color:#246ebf;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px" target="__blank"><span style="color:#fff;padding:5px 12px;font-size:10px;line-height:15px;border-color:#6cacf4;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;text-shadow:none;-moz-text-shadow:none;-webkit-text-shadow:none"><i class="fa fa-file-o" style="font-size:10px;color:#fff"></i> Dynare Code</span></a>
+<br />
+This paper questions the role of cross-border lending in the definition of national macroprudential policies in the European Monetary Union. We build and estimate a two-country DSGE model with corporate and interbank cross-border loans, Core-Periphery diverging financial cycles and a national implementation of coordinated macroprudential measures based on Countercyclical Capital Buffers. I provide here the estimated model (at the mode), not the optimization exercise.<br />
+</div></div>
+<div class="su-spoiler su-spoiler-style-fancy su-spoiler-icon-folder-1 su-spoiler-closed"><div class="su-spoiler-title"><span class="su-spoiler-icon"></span>A Welfare Analysis of Macroprudential Policy Rules in the Euro Area</div><div class="su-spoiler-content su-clearfix" style="display:none">
+<a href="https://www.researchgate.net/publication/302970776_A_Welfare_Analysis_of_Macroprudential_Policy_Rules_in_the_Euro_Area" class="su-button su-button-style-default" style="color:#fff;background-color:#2D89EF;border-color:#246ebf;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px" target="__blank"><span style="color:#fff;padding:5px 12px;font-size:10px;line-height:15px;border-color:#6cacf4;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;text-shadow:none;-moz-text-shadow:none;-webkit-text-shadow:none"><i class="fa fa-file-pdf-o" style="font-size:10px;color:#fff"></i> pdf</span></a> <a href="https://www.cairn.info/revue-d-economie-politique-2017-2-page-191.htm" class="su-button su-button-style-default" style="color:#fff;background-color:#2D89EF;border-color:#246ebf;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px" target="__blank"><span style="color:#fff;padding:5px 12px;font-size:10px;line-height:15px;border-color:#6cacf4;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;text-shadow:none;-moz-text-shadow:none;-webkit-text-shadow:none"><i class="fa fa-file-pdf-o" style="font-size:10px;color:#fff"></i> Journal</span></a>
+<a href="https://www.dropbox.com/s/pkj8yff8i5jygvl/code.zip?dl=1" class="su-button su-button-style-default" style="color:#fff;background-color:#2D89EF;border-color:#246ebf;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px" target="__blank"><span style="color:#fff;padding:5px 12px;font-size:10px;line-height:15px;border-color:#6cacf4;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;text-shadow:none;-moz-text-shadow:none;-webkit-text-shadow:none"><i class="fa fa-file-o" style="font-size:10px;color:#fff"></i> Dynare Code</span></a>
+<br />
+In this paper published in <i>Revue d&#8217;Economie Politique</i> in 2017, we estimate DSGE model of the European Monetary Union that accounts for financial differences between core and peripheral countries. We find that country-adjusted macroprudential measures lead to significant welfare gains with respect to a uniform macroprudential policy rule that reacts to union-wide financial developments. However, peripheral countries are the winners from the implementation of macroprudential measures while core countries incur welfare losses, thus questioning the interest of adopting coordinated macroprudential measures with peripheral countries.<br />
+</div></div>
+<div class="su-spoiler su-spoiler-style-fancy su-spoiler-icon-folder-1 su-spoiler-closed"><div class="su-spoiler-title"><span class="su-spoiler-icon"></span>Financial Frictions and the Extensive Margin of Activity</div><div class="su-spoiler-content su-clearfix" style="display:none">
+<a href="https://www.researchgate.net/publication/280001607_Financial_Frictions_and_the_Extensive_Margin_of_Activity" class="su-button su-button-style-default" style="color:#fff;background-color:#2D89EF;border-color:#246ebf;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px" target="__blank"><span style="color:#fff;padding:5px 12px;font-size:10px;line-height:15px;border-color:#6cacf4;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;text-shadow:none;-moz-text-shadow:none;-webkit-text-shadow:none"><i class="fa fa-file-pdf-o" style="font-size:10px;color:#fff"></i> pdf</span></a> <a href="http://www.sciencedirect.com/science/article/pii/S1090944315300557" class="su-button su-button-style-default" style="color:#fff;background-color:#2D89EF;border-color:#246ebf;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px" target="__blank"><span style="color:#fff;padding:5px 12px;font-size:10px;line-height:15px;border-color:#6cacf4;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;text-shadow:none;-moz-text-shadow:none;-webkit-text-shadow:none"><i class="fa fa-file-pdf-o" style="font-size:10px;color:#fff"></i> Journal (RiE)</span></a>
+<a href="https://www.dropbox.com/s/gx0tu71z17qht3s/PV_2015b.mod?dl=1" class="su-button su-button-style-default" style="color:#fff;background-color:#2D89EF;border-color:#246ebf;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px" target="__blank"><span style="color:#fff;padding:5px 12px;font-size:10px;line-height:15px;border-color:#6cacf4;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;text-shadow:none;-moz-text-shadow:none;-webkit-text-shadow:none"><i class="fa fa-file-o" style="font-size:10px;color:#fff"></i> Dynare Code</span></a>
+<a href="http://vermandel.fr" class="su-button su-button-style-default" style="color:#fff;background-color:#2D89EF;border-color:#246ebf;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px" target="__blank"><span style="color:#fff;padding:5px 12px;font-size:10px;line-height:15px;border-color:#6cacf4;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;text-shadow:none;-moz-text-shadow:none;-webkit-text-shadow:none"><i class="fa fa-file-o" style="font-size:10px;color:#fff"></i> Data</span></a>
+<br />
+In this paper published in <i>Research in Economics</i> in 2015, we evaluate the role of financial frictions on the decision to create new goods/startups using an estimated DSGE model. We extend the initial framework of Bilbiie, Ghironi and Melitz (2012) and augment it with real, nominal and financial frictions to get a data friendly model. The model is estimated using Bayesian techniques for the US economy. I share the model which is calibrated on the posterior estimated mean value of deep parameters and shocks, I also share the data involved in the estimation exercise.<br />
+</div></div>
+<div class="su-spoiler su-spoiler-style-fancy su-spoiler-icon-folder-1 su-spoiler-closed"><div class="su-spoiler-title"><span class="su-spoiler-icon"></span>Cross-border lending (interbank and corporate) in an Estimated DSGE model</div><div class="su-spoiler-content su-clearfix" style="display:none">
+<a href="https://www.researchgate.net/profile/Gauthier_Vermandel/publication/268527673_Cross-border_banking_flows_spillovers_in_the_Eurozone_Evidence_from_an_estimated_DSGE_model/links/551eb13c0cf29dcabb066b27.pdf" class="su-button su-button-style-default" style="color:#fff;background-color:#2D89EF;border-color:#246ebf;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px" target="__blank"><span style="color:#fff;padding:5px 12px;font-size:10px;line-height:15px;border-color:#6cacf4;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;text-shadow:none;-moz-text-shadow:none;-webkit-text-shadow:none"><i class="fa fa-file-pdf-o" style="font-size:10px;color:#fff"></i> pdf</span></a> <a href="http://www.sciencedirect.com/science/article/pii/S0165188914003030" class="su-button su-button-style-default" style="color:#fff;background-color:#2D89EF;border-color:#246ebf;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px" target="__blank"><span style="color:#fff;padding:5px 12px;font-size:10px;line-height:15px;border-color:#6cacf4;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;text-shadow:none;-moz-text-shadow:none;-webkit-text-shadow:none"><i class="fa fa-file-pdf-o" style="font-size:10px;color:#fff"></i> Journal (JEDC)</span></a>
+<a href="https://www.dropbox.com/s/92tclznr3exfjo2/PV_JEDC2015.mod?dl=1" class="su-button su-button-style-default" style="color:#fff;background-color:#2D89EF;border-color:#246ebf;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px" target="__blank"><span style="color:#fff;padding:5px 12px;font-size:10px;line-height:15px;border-color:#6cacf4;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;text-shadow:none;-moz-text-shadow:none;-webkit-text-shadow:none"><i class="fa fa-file-o" style="font-size:10px;color:#fff"></i> Dynare Codes</span></a> <br />
+This model is the first estimated DSGE model with cross-border lending and has been published in the <i>Journal of Economic Dynamics and Control</i> (2015). I cannot give the data, these are internal to ECB and cannot be shared. The given mod file is calibrated on the estimated parameters and shocks in our paper (at the posterior mean).<br />
+</div></div>
+<div class="su-spoiler su-spoiler-style-fancy su-spoiler-icon-folder-1 su-spoiler-closed"><div class="su-spoiler-title"><span class="su-spoiler-icon"></span>A Simple dynamic 3-equation New Keynesian Model</div><div class="su-spoiler-content su-clearfix" style="display:none">
+<a href="https://www.researchgate.net/publication/279929585_The_analytics_of_the_New_Keynesian_3-equation_Model" class="su-button su-button-style-default" style="color:#fff;background-color:#2D89EF;border-color:#246ebf;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px" target="__blank"><span style="color:#fff;padding:5px 12px;font-size:10px;line-height:15px;border-color:#6cacf4;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;text-shadow:none;-moz-text-shadow:none;-webkit-text-shadow:none"><i class="fa fa-file-pdf-o" style="font-size:10px;color:#fff"></i> pdf</span></a>
+<a href="https://www.dropbox.com/s/82uq1kgqiaj1uam/PSV_NK3eq.mod?dl=1" class="su-button su-button-style-default" style="color:#fff;background-color:#2D89EF;border-color:#246ebf;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px" target="__blank"><span style="color:#fff;padding:5px 12px;font-size:10px;line-height:15px;border-color:#6cacf4;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;text-shadow:none;-moz-text-shadow:none;-webkit-text-shadow:none"><i class="fa fa-file-o" style="font-size:10px;color:#fff"></i> Dynare Codes</span></a>
+<br />
+This code was published in the <i>Economics and Business Review</i> hosted by the University of Poznan. This paper aims at introducing New Keynesian Macroeconomics for graduate students. This paper is currently taught in the Master Program of the University Paris-Dauphine, University of Rennes and the University of Poznan.<br />
+</div></div>
+<h3><b>Bibliography</b></h3>
+<p>Melitz, M., Bilbiie, F. O., &#038; Ghironi, F. (2012). Endogenous Entry, Product Variety, and Business Cycles. Journal of Political Economy, 120(2).<br />
+Calvo, G. A. (1983). Staggered prices in a utility-maximizing framework. Journal of monetary Economics, 12(3), 383-398.<br />
+Christiano, L. J., Eichenbaum, M., &#038; Evans, C. L. (2005). Nominal rigidities and the dynamic effects of a shock to monetary policy. Journal of political Economy, 113(1), 1-45.<br />
+Poutineau, J. C., &#038; Vermandel, G. (2015). Cross-border banking flows spillovers in the Eurozone: Evidence from an estimated DSGE model. Journal of Economic Dynamics and Control, 51, 378-403.<br />
+Poutineau, J. C., &#038; Vermandel, G. (2015). Financial frictions and the extensive margin of activity. Research in Economics, 69(4), 525-554.<br />
+Poutineau, J. C., &#038; Vermandel, G. (2017). A Welfare Analysis of Macroprudential Policy Rules in the Euro Area. Revue d Economie Politique.<br />
+Poutineau, J. C., &#038; Vermandel, G. (2017). Global banking and the conduct of macroprudential policy in a monetary union. Journal of Macroeconomics, 54, 306-331.<br />
+Rotemberg, J. J. (1982). A monetary equilibrium model with transactions costs.<br />
+Smets, F., &#038; Wouters, R. (2003). An estimated dynamic stochastic general equilibrium model of the euro area. Journal of the European economic association, 1(5), 1123-1175.<br />
+Smets, F., &#038; Wouters, R. (2007). Shocks and frictions in US business cycles: A Bayesian DSGE approach. National bank of belgium working paper, (109).</p>
+		        <footer class="entry-meta">
+		        </footer><!-- .entry-meta -->
+	</div><!-- .entry-content -->
+</article><!-- #post-349 -->
+
+					
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="post pingback">
+        <p>Pingback: <a href='http://%/ifbejbg369' rel='external nofollow' class='url'>jesse</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-1090">
+        <div id="dsq-comment-header-1090" class="dsq-comment-header">
+            <cite id="dsq-cite-1090">
+                <span id="dsq-author-user-1090">César Chávez</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1090" class="dsq-comment-body">
+            <div id="dsq-comment-message-1090" class="dsq-comment-message"><p>Thanks</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+var disqus_url = 'http://vermandel.fr/dsge-dynare-model-matlab-codes/';
+var disqus_identifier = '349 http://vermandel.fr/?page_id=349';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'vermandel';
+var disqus_title = "DSGE Dynare Model Matlab Codes";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+        this.callbacks.onReady.push(function () {
+
+        // sync comments in the background so we don't block the page
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = '?cf_action=sync_comments&post_id=349';
+
+        var firstScript = document.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(script, firstScript);
+    });
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+
+
+				
+			</div><!-- #content .site-content -->
+		</div><!-- #primary .content-area -->
+
+		<div id="secondary" class="widget-area" role="complementary">
+						
+				<aside id="search" class="widget widget_search">
+						<form method="get" id="searchform" action="http://vermandel.fr/" role="search">
+		<label for="s" class="assistive-text">Search</label>
+		<input type="text" class="field" name="s" value="" id="s" placeholder="Search &hellip;" />
+		<input type="submit" class="submit" name="submit" id="searchsubmit" value="Search" />
+	</form>
+				</aside>
+
+				<aside id="archives" class="widget">
+					<h1 class="widget-title">Archives</h1>
+					<ul>
+							<li><a href='http://vermandel.fr/2014/04/'>April 2014</a></li>
+	<li><a href='http://vermandel.fr/2014/02/'>February 2014</a></li>
+	<li><a href='http://vermandel.fr/2013/10/'>October 2013</a></li>
+	<li><a href='http://vermandel.fr/2013/05/'>May 2013</a></li>
+	<li><a href='http://vermandel.fr/2011/12/'>December 2011</a></li>
+					</ul>
+				</aside>
+
+				<aside id="meta" class="widget">
+					<h1 class="widget-title">Meta</h1>
+					<ul>
+												<li><a href="http://vermandel.fr/wp-login.php">Log in</a></li>
+											</ul>
+				</aside>
+
+					</div><!-- #secondary .widget-area -->
+
+		<div id="tertiary" class="widget-area" role="supplementary">
+						</div><!-- #tertiary .widget-area -->	</div>
+
+</div><!-- #main .site-main -->
+
+	<footer id="colophon" class="site-footer" role="contentinfo">
+
+			<div class="footer_container">
+			<div class="section group">
+
+				<div class="col span_1_of_3">
+											<div class="widget">
+							<h4>Widget Ready</h4>							<p>This left column is widget ready! Add one in the admin panel.</p>						</div>     
+					  
+				</div>
+
+				<div class="col span_1_of_3">
+											<div class="widget">
+							<h4>Widget Ready</h4>							<p>This center column is widget ready! Add one in the admin panel.</p>						</div>     
+					 
+				</div>
+
+				<div class="col span_1_of_3">
+											<div class="widget">
+							<h4>Widget Ready</h4>							<p>This right column is widget ready! Add one in the admin panel.</p>						</div>     
+					 
+				</div>
+
+			</div>
+		</div><!-- footer container -->
+	
+        
+	        <div class="site-info">
+
+	        			           
+		           ~ Gauthier Vermandel ~
+		        
+			</div><!-- .site-info -->
+
+		
+	</footer><!-- #colophon .site-footer -->
+
+    <a href="#top" id="smoothup"></a>
+
+</div><!-- #page .hfeed .site -->
+</div><!-- end of wrapper -->
+        <script type="text/javascript">
+        // <![CDATA[
+        var disqus_shortname = 'vermandel';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i < nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1 && nodes[i].parentNode.tagName == 'A') {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('data-dsqidentifier'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]>
+        </script>
+        	<div style="display:none">
+	</div>
+<link rel='stylesheet' id='su-content-shortcodes-css'  href='http://vermandel.fr/wp-content/plugins/shortcodes-ultimate/assets/css/content-shortcodes.css?ver=5.0.2' type='text/css' media='all' />
+<link rel='stylesheet' id='su-box-shortcodes-css'  href='http://vermandel.fr/wp-content/plugins/shortcodes-ultimate/assets/css/box-shortcodes.css?ver=5.0.2' type='text/css' media='all' />
+<script type='text/javascript' src='http://vermandel.fr/wp-content/plugins/simple-tooltips/zebra_tooltips.js?ver=4.7.10'></script>
+<script type='text/javascript' src='http://vermandel.fr/wp-content/plugins/jetpack/_inc/build/photon/photon.min.js?ver=20130122'></script>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js?ver=201817'></script>
+<script type='text/javascript' src='http://vermandel.fr/wp-content/plugins/wp-syntax/js/wp-syntax.js?ver=1.1'></script>
+<script type='text/javascript' src='http://vermandel.fr/wp-content/themes/discovery/js/small-menu.js?ver=2.1.1'></script>
+<script type='text/javascript' src='http://vermandel.fr/wp-content/themes/discovery/js/smoothscroll.js?ver=4.7.10'></script>
+<script type='text/javascript' src='http://vermandel.fr/wp-includes/js/comment-reply.min.js?ver=4.7.10'></script>
+<script type='text/javascript' src='http://vermandel.fr/wp-includes/js/wp-embed.min.js?ver=4.7.10'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var su_other_shortcodes = {"no_preview":"This shortcode doesn't work in live preview. Please insert it into editor and preview on the site."};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://vermandel.fr/wp-content/plugins/shortcodes-ultimate/assets/js/other-shortcodes.js?ver=5.0.2'></script>
+                			            
+                <script type="text/javascript">
+                    jQuery(function() {
+                                                
+                        jQuery(".tooltips img").closest(".tooltips").css("display", "inline-block");
+                    
+                        new jQuery.Zebra_Tooltips(jQuery('.tooltips').not('.custom_m_bubble'), {
+                            'background_color':     '#ffffff',
+                            'color':				'#383838',
+                            'max_width':  750,
+                            'opacity':    .95, 
+                            'position':    'center'
+                        });
+                        
+                                            
+                    });
+                </script>        
+		<script type='text/javascript' src='https://stats.wp.com/e-201817.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:5.7.1',blog:'112717452',post:'349',tz:'0',srv:'vermandel.fr'} ]);
+	_stq.push([ 'clickTrackerInit', '112717452', '349' ]);
+</script>
+
+</body>
+</html>
+<!-- Dynamic page generated in 1.902 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2018-04-23 23:08:08 -->
+
+<!-- Compression = gzip -->
